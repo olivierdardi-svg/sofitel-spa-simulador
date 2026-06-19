@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Custos SPA — Sofitel Ipanema × KOS Paris</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+:root{
+  --ink:#1c1a17;--ink-2:#5a5650;--ink-3:#9a9590;
+  --bg:#faf8f4;--surface:#fff;--s2:#f3f0e8;--s3:#e8e4da;--border:#ddd9cf;
+  --gold:#b8965a;--gold-l:#f5eddd;--gold-d:#d4b47a;
+  --ok:#2d6a4f;--ok-l:#eaf4ee;--warn:#92600a;--warn-l:#fdf3e0;
+  --danger:#8b2a2a;--danger-l:#fdf0f0;--info:#1a4a6b;--info-l:#eaf2f8;
+  --r:8px;--serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5}
+header{background:var(--ink);padding:1.5rem 2rem;display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+header h1{font-family:var(--serif);font-size:1.7rem;font-weight:300;color:#fff;line-height:1.15}
+header h1 em{font-style:italic;color:var(--gold-d)}
+header p{font-size:10px;color:#9a9590;letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
+.hbadge{background:rgba(184,150,90,.15);border:1px solid rgba(184,150,90,.3);border-radius:6px;padding:8px 14px;text-align:right}
+.hbadge span{display:block;font-size:10px;color:var(--gold-d);letter-spacing:.06em;text-transform:uppercase}
+.hbadge strong{font-family:var(--serif);font-size:1.2rem;color:#fff;font-weight:300}
+.tab-bar{display:flex;background:var(--s2);border-bottom:1px solid var(--border);padding:0 1.5rem;gap:2px;overflow-x:auto}
+.tab-btn{padding:11px 18px;font-size:11.5px;font-weight:500;color:var(--ink-2);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab-pane{display:none;padding:1.75rem 2rem 4rem}
+.tab-pane.active{display:block}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.auto-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.25rem}
+.sec{font-size:9.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:14px;margin-top:1.5rem}
+.sec:first-child{margin-top:0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.25rem;margin-bottom:1rem}
+.metric{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:11px 13px}
+.metric-label{font-size:10px;color:var(--ink-3);margin-bottom:4px}
+.metric-value{font-family:var(--serif);font-size:1.3rem;color:var(--ink);line-height:1.1}
+.metric-sub{font-size:9.5px;color:var(--ink-3);margin-top:2px}
+.metric.ok{background:var(--ok-l);border-color:#a0c8b4}.metric.ok .metric-value{color:var(--ok)}
+.metric.warn{background:var(--warn-l);border-color:#ddb96a}.metric.warn .metric-value{color:var(--warn)}
+.metric.danger{background:var(--danger-l);border-color:#d4a0a0}.metric.danger .metric-value{color:var(--danger)}
+.metric.gold{background:var(--gold-l);border-color:var(--gold-d)}.metric.gold .metric-value{color:var(--gold)}
+.metric.info{background:var(--info-l);border-color:#a0bcd4}.metric.info .metric-value{color:var(--info)}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label{font-size:11px;color:var(--ink-2)}
+.field-note{font-size:10px;color:var(--ink-3);margin-top:2px}
+.srow{display:flex;align-items:center;gap:10px}
+.srow input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--s3);border-radius:99px;outline:none}
+.srow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--gold);border-radius:50%;cursor:pointer;border:2px solid var(--bg);box-shadow:0 0 0 1px var(--gold)}
+.sv{font-size:12px;font-weight:500;color:var(--ink);min-width:52px;text-align:right}
+.table-wrap{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:1.25rem}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{background:var(--s2);font-size:9.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+tbody td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--ink);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tr.tot td{font-weight:600;background:var(--s2);border-top:1px solid var(--border)}
+tbody tr:not(.tot):hover td{background:var(--s2)}
+td.r{text-align:right}
+td.ok{color:var(--ok);font-weight:600}
+td.warn{color:var(--warn);font-weight:600}
+td.danger{color:var(--danger);font-weight:600}
+.ecell{cursor:text;padding:2px 6px;border-radius:4px;border:1px solid transparent;display:inline-block;min-width:32px;text-align:right;transition:background .12s,border-color .12s}
+.ecell:hover{background:var(--s2);border-color:var(--border)}
+.ecell:focus{outline:none;background:#fff;border-color:var(--gold);box-shadow:0 0 0 2px rgba(184,150,90,.15)}
+.edit-hint{font-size:10px;color:var(--ink-3);margin-bottom:8px}
+.edit-hint::before{content:'✏ '}
+.badge{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:99px;margin-left:3px;vertical-align:middle}
+.hl-box{background:var(--ink);border-radius:var(--r);padding:1.25rem 1.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.5rem}
+.hl-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-d);margin-bottom:4px}
+.hl-val{font-family:var(--serif);font-size:2rem;font-weight:300;color:#fff;line-height:1}
+.hl-sub{font-size:10px;color:#9a9590;margin-top:3px}
+.note-box{background:var(--warn-l);border:1px solid #ddb96a;border-radius:var(--r);padding:10px 14px;font-size:11px;color:var(--warn);margin-bottom:1.25rem;line-height:1.6}
+.info-box{background:var(--info-l);border:1px solid #a0bcd4;border-radius:var(--r);padding:10px 14px;font-size:11px;color:var(--info);margin-bottom:1.25rem;line-height:1.6}
+.room-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem}
+.room-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;text-align:center}
+.room-card.casal{border-top:2px solid var(--gold)}
+.room-icon{font-size:20px;margin-bottom:4px}
+.room-name{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-2);margin-bottom:6px}
+.room-big{font-family:var(--serif);font-size:1.8rem;color:var(--ink);line-height:1}
+.room-sub{font-size:10px;color:var(--ink-3);margin-top:3px}
+.sce-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-bottom:1.25rem}
+.sce-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.sce-card.cur{border:2px solid var(--gold);background:var(--gold-l)}
+.sce-tag{font-size:9.5px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-bottom:6px}
+.sce-val{font-family:var(--serif);font-size:1.2rem;color:var(--ink);margin-bottom:2px}
+.sce-sub{font-size:10.5px;color:var(--ink-2)}
+.trat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;overflow:hidden}
+.trat-header{padding:12px 16px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.trat-tipo{font-size:9.5px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.trat-nome{font-family:var(--serif);font-size:1.15rem;font-weight:400}
+.trat-desc{font-size:10px;color:var(--ink-3);margin-top:2px}
+.trat-right{text-align:right;flex-shrink:0}
+.trat-cost{font-family:var(--serif);font-size:1.3rem;color:var(--ink)}
+.trat-cost-sub{font-size:10px;color:var(--ink-3);margin-top:2px}
+.trat-body{padding:0 0 12px}
+.trat-footer{padding:8px 16px;background:var(--s2);border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:16px;font-size:12px}
+input[type=number].ninput{width:80px;padding:4px 8px;border:1px solid var(--border);border-radius:4px;font-size:12px;text-align:right;background:var(--surface);color:var(--ink);font-family:var(--sans)}
+input[type=number].ninput:focus{outline:none;border-color:var(--gold)}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}.tab-pane{padding:1.25rem 1rem 3rem}header{padding:1rem}header h1{font-size:1.3rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Simulador de Custos SPA<br><em>Sofitel Ipanema × KOS Paris</em></h1>
+    <p>Documento interno · Estimativas — validar com ficha técnica KOS</p>
+  </div>
+  <div class="hbadge">
+    <span>Consumo anual estimado</span>
+    <strong id="hdr-eur">—</strong>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('sessoes',this)">1. Sessões</button>
+  <button class="tab-btn" onclick="showTab('produtos',this)">2. Produtos KOS</button>
+  <button class="tab-btn" onclick="showTab('tratamentos',this)">3. Tratamentos</button>
+  <button class="tab-btn" onclick="showTab('custos',this)">4. Custos &amp; Importação</button>
+  <button class="tab-btn" onclick="showTab('resultado',this)">5. Resultado Final</button>
+</div>
+
+<!-- TAB 1 SESSÕES -->
+<div class="tab-pane active" id="tab-sessoes">
+  <div class="info-box"><strong>Referência Fairmont Rio:</strong> 5 salas (2 casal) · 400–500 sessões/mês · 2.121 sessões de fev–jun · ~40ml óleo/sessão · R$20.000 em óleo e R$2.900 em cremes no período (~R$4.000/mês em óleo). Sofitel: 3 salas (1 individual + 2 casal) → estimado 240–300 sessões/mês no regime pleno.</div>
+  <div class="sec">Configuração das salas</div>
+  <div class="room-grid">
+    <div class="room-card"><div class="room-icon">🛏</div><div class="room-name">Individual</div><div class="room-big" id="r-ind">—</div><div class="room-sub">sessões/mês</div></div>
+    <div class="room-card casal"><div class="room-icon">💑</div><div class="room-name">Casal 1</div><div class="room-big" id="r-cas1">—</div><div class="room-sub">sessões/mês</div></div>
+    <div class="room-card casal"><div class="room-icon">💑</div><div class="room-name">Casal 2</div><div class="room-big" id="r-cas2">—</div><div class="room-sub">sessões/mês</div></div>
+  </div>
+  <div class="sec">Parâmetros de volume</div>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <div class="field"><label>Total de sessões por mês</label><div class="srow"><input type="range" id="s-sess" min="50" max="400" step="10" value="150" oninput="calc()"><span class="sv" id="sv-sess">150</span></div><div class="field-note">Fairmont (5 salas): 400–500/mês. Sofitel (3 salas): estimado 240–300/mês no pleno.</div></div>
+        <div class="field"><label>% de sessões em quartos casal</label><div class="srow"><input type="range" id="s-casal" min="10" max="80" step="5" value="45" oninput="calc()"><span class="sv" id="sv-casal">45%</span></div><div class="field-note">2 de 3 salas são casal — estimativa: 45–55% das sessões.</div></div>
+        <div class="field"><label>Dias de operação por mês</label><div class="srow"><input type="range" id="s-dias" min="20" max="30" step="1" value="26" oninput="calc()"><span class="sv" id="sv-dias">26</span></div></div>
+      </div>
+      <div>
+        <div class="sec" style="margin-top:0">Fairmont — referência real</div>
+        <div style="display:grid;gap:8px">
+          <div class="metric"><div class="metric-label">Sessões fev–jun (5 salas)</div><div class="metric-value">2.121</div><div class="metric-sub">~424/mês em média</div></div>
+          <div class="metric warn"><div class="metric-label">Gasto em óleo no período</div><div class="metric-value">R$ 20.000</div><div class="metric-sub">~R$4.000/mês</div></div>
+          <div class="metric"><div class="metric-label">Gasto em cremes no período</div><div class="metric-value">R$ 2.900</div><div class="metric-sub">~14,5% do valor de óleo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">Volume resultante</div>
+  <div class="auto-col" id="vol-metrics"></div>
+</div>
+
+<!-- TAB 2 PRODUTOS -->
+<div class="tab-pane" id="tab-produtos">
+  <div class="info-box"><strong>Preços de venda França:</strong> valores do site kos-paris.com para consumidor final. O <strong>coeficiente hotel</strong> converte para o preço que a KOS cobra ao Sofitel (canal profissional — tipicamente 40–55% do varejo). Cada produto tem também um coeficiente individual para ajuste fino.</div>
+  <div class="sec">Coeficiente global hotel</div>
+  <div class="card">
+    <div class="two-col" style="align-items:center">
+      <div>
+        <div class="field"><label>% do preço varejo aplicado ao hotel</label><div class="srow"><input type="range" id="s-ch" min="30" max="70" step="1" value="45" oninput="calc()"><span class="sv" id="sv-ch">45%</span></div><div class="field-note">Ex: 45% → produto de €100 no site = €45 para o hotel. Ajustar conforme negociação.</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="metric info"><div class="metric-label">Preço varejo médio</div><div class="metric-value" id="p-vm">—</div><div class="metric-sub">produtos com preço público</div></div>
+        <div class="metric gold"><div class="metric-label">Preço hotel médio</div><div class="metric-value" id="p-hm">—</div><div class="metric-sub">após coeficiente</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">Catálogo de produtos KOS Paris</div>
+  <div class="edit-hint">Clique em qualquer célula sublinhada para editar diretamente</div>
+  <div class="table-wrap"><table id="prod-table">
+    <thead><tr><th>Produto</th><th>Linha</th><th>Cat.</th><th class="r">Preço varejo França (€)</th><th class="r">Coef. individual</th><th class="r">Preço hotel (€)</th><th class="r">Tamanho unit. (ml)</th><th class="r">€ por ml</th></tr></thead>
+    <tbody id="prod-tbody"></tbody>
+  </table></div>
+</div>
+
+<!-- TAB 3 TRATAMENTOS -->
+<div class="tab-pane" id="tab-tratamentos">
+  <div class="note-box">⚠ Ingredientes e quantidades são estimativas baseadas nas descrições do brandbook KOS. Confirmar com a ficha técnica cabin quando disponível. Edite diretamente os campos de ml e número de sessões.</div>
+  <div class="sec">Protocolos KOS sugeridos para o Sofitel Ipanema</div>
+  <div id="trat-container"></div>
+</div>
+
+<!-- TAB 4 CUSTOS -->
+<div class="tab-pane" id="tab-custos">
+  <div class="sec">Câmbio &amp; Importação</div>
+  <div class="card">
+    <div class="two-col">
+      <div class="field"><label>Câmbio EUR / BRL</label><div class="srow"><input type="range" id="s-cambio" min="5.50" max="7.50" step="0.05" value="6.10" oninput="calc()"><span class="sv" id="sv-cambio">6,10</span></div></div>
+      <div class="field"><label>Coeficiente importador</label><div class="srow"><input type="range" id="s-cimp" min="1.00" max="3.50" step="0.05" value="2.65" oninput="calc()"><span class="sv" id="sv-cimp">2,65×</span></div><div class="field-note">Inclui rótulos, taxas alfandegárias, estrutura do importador.</div></div>
+    </div>
+  </div>
+  <div class="sec">ANVISA — Registro de produtos no Brasil</div>
+  <div class="card">
+    <div class="two-col">
+      <div>
+        <div class="field"><label>Nº de SKUs a registrar</label><div class="srow"><input type="range" id="s-skus" min="0" max="30" step="1" value="15" oninput="calc()"><span class="sv" id="sv-skus">15</span></div></div>
+        <div class="field"><label>Taxa TFVS por produto (R$)</label><div class="srow"><input type="range" id="s-tfvs" min="0" max="12000" step="500" value="7262" oninput="calc()"><span class="sv" id="sv-tfvs">R$7.262</span></div></div>
+        <div class="field"><label>Consultoria regulatória + RT ano 1 (R$)</label><div class="srow"><input type="range" id="s-consult" min="0" max="80000" step="5000" value="47500" oninput="calc()"><span class="sv" id="sv-consult">R$47.500</span></div></div>
+      </div>
+      <div style="display:grid;gap:8px;align-content:start">
+        <div class="metric warn"><div class="metric-label">Taxa TFVS total</div><div class="metric-value" id="m-tfvs">—</div></div>
+        <div class="metric warn"><div class="metric-label">Consultoria + RT</div><div class="metric-value" id="m-consult">—</div></div>
+        <div class="metric danger"><div class="metric-label">Total ANVISA (R$)</div><div class="metric-value" id="m-anv-brl">—</div></div>
+        <div class="metric danger"><div class="metric-label">Total ANVISA (EUR)</div><div class="metric-value" id="m-anv-eur">—</div><div class="metric-sub">a confirmar quem absorve</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">Decomposição do custo landed mensal</div>
+  <div class="auto-col" id="decomp-metrics"></div>
+</div>
+
+<!-- TAB 5 RESULTADO -->
+<div class="tab-pane" id="tab-resultado">
+  <div class="hl-box" id="hl-box"></div>
+  <div class="sec">Resumo de custo</div>
+  <div class="auto-col" id="res-metrics"></div>
+  <div class="sec">Projeção por cenário de volume</div>
+  <div class="sce-grid" id="sce-grid"></div>
+  <div class="sec">Comparativo com propostas KOS</div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Cenário</th><th class="r">Consumo est. EUR/ano</th><th class="r">Proposta KOS €5k/ano</th><th class="r">Proposta KOS €25k/ano</th><th class="r">Diff. vs €5k</th><th class="r">Diff. vs €25k</th></tr></thead>
+    <tbody id="comp-tbody"></tbody>
+  </table></div>
+  <div class="sec">Argumento para a negociação</div>
+  <div class="card" id="arg-box"></div>
+</div>
+
+<script>
+// ── DADOS (mutáveis) ─────────────────────────────────────────────────────────
+const P = [
+  {id:'p01',n:'Legends Serum (Elixir des Légendes)',  l:'Legends',       c:'Face',     v:107, ci:1, mu:30},
+  {id:'p02',n:'Legends Cream (Crème des Légendes)',   l:'Legends',       c:'Face',     v:139, ci:1, mu:50},
+  {id:'p03',n:'Legends Mask (Masque des Légendes)',   l:'Legends',       c:'Face',     v:16,  ci:1, mu:50},
+  {id:'p04',n:'Chamomile Serum',                      l:'Chamomile',     c:'Face',     v:72,  ci:1, mu:30},
+  {id:'p05',n:'Chamomile Cream',                      l:'Chamomile',     c:'Face',     v:74,  ci:1, mu:50},
+  {id:'p06',n:'Chamomile Scrub',                      l:'Chamomile',     c:'Face',     v:74,  ci:1, mu:50},
+  {id:'p07',n:'Illuminating Serum (Sérum Éclat)',     l:'Illuminating',  c:'Face',     v:77,  ci:1, mu:30},
+  {id:'p08',n:'Illuminating Cream (Crème Éclat)',     l:'Illuminating',  c:'Face',     v:82,  ci:1, mu:50},
+  {id:'p09',n:'Illuminating Scrub (Gommage Éclat)',   l:'Illuminating',  c:'Face',     v:83,  ci:1, mu:50},
+  {id:'p10',n:'Eye Contour (Contour des Yeux)',        l:'Face',          c:'Face',     v:77,  ci:1, mu:15},
+  {id:'p11',n:'Cleansing Oil (Huile Démaquillante)',   l:'Face',          c:'Face',     v:46,  ci:1, mu:100},
+  {id:'p12',n:'Rose Floral Water',                     l:'Face',          c:'Face',     v:36,  ci:1, mu:200},
+  {id:'p13',n:'Orange Blossom Floral Water',           l:'Face',          c:'Face',     v:36,  ci:1, mu:200},
+  {id:'p14',n:'Jardin d\'Ambre (óleo corporal)',       l:'Gardens',       c:'Body',     v:67,  ci:1, mu:100},
+  {id:'p15',n:'Jardin de l\'Aube (óleo corporal)',     l:'Gardens',       c:'Body',     v:67,  ci:1, mu:100},
+  {id:'p16',n:'Jardin des Songes (óleo corporal)',     l:'Gardens',       c:'Body',     v:67,  ci:1, mu:100},
+  {id:'p17',n:'Jardin d\'Orient (óleo corporal)',      l:'Gardens',       c:'Body',     v:67,  ci:1, mu:100},
+  {id:'p18',n:'Argan Oil Rose',                        l:'Argan',         c:'Body',     v:62,  ci:1, mu:100},
+  {id:'p19',n:'Argan Oil Island Flowers',              l:'Argan',         c:'Body',     v:62,  ci:1, mu:100},
+  {id:'p20',n:'Argan Oil Citrus-Verbena',              l:'Argan',         c:'Body',     v:62,  ci:1, mu:100},
+  {id:'p21',n:'Babassu Butter',                        l:'Body',          c:'Body',     v:61,  ci:1, mu:150},
+  {id:'p22',n:'Mango Butter',                          l:'Body',          c:'Body',     v:61,  ci:1, mu:150},
+  {id:'p23',n:'Coconut Butter',                        l:'Body',          c:'Body',     v:61,  ci:1, mu:150},
+  {id:'p24',n:'Wellness Pearl',                        l:'Pearls',        c:'Body',     v:58,  ci:1, mu:100},
+  {id:'p25',n:'Slimming Pearl',                        l:'Pearls',        c:'Body',     v:77,  ci:1, mu:100},
+  {id:'p26',n:'Mauritian Sugar Scrub',                 l:'Body',          c:'Body',     v:0,   ci:1, mu:200},
+  {id:'p27',n:'Sea Salt Crystals Scrub',               l:'Body',          c:'Body',     v:0,   ci:1, mu:200},
+  {id:'p28',n:'Intense Hair Care',                     l:'Hair',          c:'Cabelo',   v:49,  ci:1, mu:100},
+  {id:'p29',n:'Night Serum (Cabelo)',                  l:'Hair',          c:'Cabelo',   v:42,  ci:1, mu:30},
+  {id:'p30',n:'Home Fragrance Jardin des Songes',      l:'Maison',        c:'Ambiente', v:52,  ci:1, mu:200},
+];
+const pid = id => P.find(x=>x.id===id);
+
+const T = [
+  {id:'t1',n:'Precious Amazonia',          tipo:'Face',  cor:'#8b5e6a', desc:'Kobido-inspired · Lifting + Vitalidade · Linha Legends',                        sess:20, ing:[{pid:'p01',mi:3,mc:3},{pid:'p02',mi:4,mc:4},{pid:'p03',mi:8,mc:8},{pid:'p10',mi:1,mc:1},{pid:'p12',mi:5,mc:5}]},
+  {id:'t2',n:'Light of Rio',               tipo:'Face',  cor:'#8b5e6a', desc:'4 passos: esfoliação + massagem + óleo buriti + nutrição · Linha Illuminating',  sess:20, ing:[{pid:'p07',mi:3,mc:3},{pid:'p08',mi:4,mc:4},{pid:'p09',mi:8,mc:8},{pid:'p11',mi:3,mc:3},{pid:'p13',mi:5,mc:5}]},
+  {id:'t3',n:'Divine Carioca',             tipo:'Face',  cor:'#8b5e6a', desc:'Pele sensível · Esfoliação suave + sérum camomila + máscara · Linha Chamomile',  sess:15, ing:[{pid:'p04',mi:3,mc:3},{pid:'p05',mi:4,mc:4},{pid:'p06',mi:8,mc:8},{pid:'p12',mi:5,mc:5}]},
+  {id:'t4',n:'After-Sun / After-Beach Ritual',tipo:'Body',cor:'#4a7c6f',desc:'Massagem corpo inteiro · Stretching + kneading + óleos perfumados · Gardens',   sess:25, ing:[{pid:'p16',mi:40,mc:80},{pid:'p21',mi:10,mc:20},{pid:'p24',mi:5,mc:10}]},
+  {id:'t5',n:'Samba Percussions',           tipo:'Body',  cor:'#4a7c6f', desc:'Deep Tissue · Pressão profunda · Argan Oils',                                    sess:20, ing:[{pid:'p19',mi:45,mc:90},{pid:'p20',mi:20,mc:40},{pid:'p27',mi:25,mc:50}]},
+  {id:'t6',n:'On the Ipanema Side',         tipo:'Body',  cor:'#4a7c6f', desc:'Relaxamento profundo · Harmonia corpo-mente guiada pela respiração · Gardens + Pearls', sess:20, ing:[{pid:'p15',mi:35,mc:70},{pid:'p24',mi:8,mc:16},{pid:'p22',mi:8,mc:16},{pid:'p30',mi:2,mc:2}]},
+];
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+const fE  = n => '€\u00a0' + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fE0 = n => '€\u00a0' + Math.round(n).toLocaleString('pt-BR');
+const fR  = n => 'R$\u00a0' + Math.round(n).toLocaleString('pt-BR');
+const fN  = (n,d=1) => n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const m   = (lbl,val,sub='',cls='') => `<div class="metric ${cls}"><div class="metric-label">${lbl}</div><div class="metric-value">${val}</div>${sub?`<div class="metric-sub">${sub}</div>`:''}</div>`;
+const badge=(txt,cl)=>`<span class="badge" style="background:var(--${cl}-l,#eaf2f8);color:var(--${cl},#1a4a6b)">${txt}</span>`;
+
+function getParams(){
+  return {
+    sess   : parseInt(document.getElementById('s-sess').value),
+    pctCas : parseInt(document.getElementById('s-casal').value)/100,
+    dias   : parseInt(document.getElementById('s-dias').value),
+    ch     : parseInt(document.getElementById('s-ch').value)/100,
+    cambio : parseFloat(document.getElementById('s-cambio').value),
+    cimp   : parseFloat(document.getElementById('s-cimp').value),
+    skus   : parseInt(document.getElementById('s-skus').value),
+    tfvs   : parseInt(document.getElementById('s-tfvs').value),
+    consult: parseInt(document.getElementById('s-consult').value),
+  };
+}
+
+function phUnit(p, ch){ return p.v * ch * p.ci; }  // preço hotel por unidade
+function eurPerMl(p, ch){ return p.mu > 0 ? phUnit(p,ch)/p.mu : 0; }
+
+function totalEurMes(params){
+  const {sess,pctCas,ch} = params;
+  const sC = Math.round(sess*pctCas), sI = sess-sC;
+  let tot = 0;
+  T.forEach(t=>{
+    const ratio = t.sess/Math.max(sess,1);
+    const tI = Math.round(t.sess*(1-pctCas)), tC = t.sess - tI;
+    t.ing.forEach(ing=>{
+      const p = pid(ing.pid);
+      if(!p||p.mu===0||p.v===0) return;
+      tot += (ing.mi*tI + ing.mc*tC) * eurPerMl(p,ch);
+    });
+  });
+  return tot;
+}
+
+// ── RENDER PRODUTOS (uma vez) ────────────────────────────────────────────────
+function renderProdutos(){
+  const tbody = document.getElementById('prod-tbody');
+  tbody.innerHTML = P.map((p,i)=>{
+    const rid = `p-v-${i}`, ciid = `p-ci-${i}`, muid = `p-mu-${i}`;
+    const phid = `p-ph-${i}`, epmlid = `p-eml-${i}`;
+    return `<tr>
+      <td>${p.n}</td>
+      <td>${badge(p.l,'info')}</td>
+      <td>${p.c}</td>
+      <td class="r"><input type="number" class="ninput" id="${rid}" value="${p.v}" min="0" step="1" oninput="P[${i}].v=parseFloat(this.value)||0;updateProdRow(${i});calcResults()"></td>
+      <td class="r"><input type="number" class="ninput" id="${ciid}" value="${p.ci}" min="0.1" max="1" step="0.01" oninput="P[${i}].ci=parseFloat(this.value)||1;updateProdRow(${i});calcResults()"></td>
+      <td class="r" id="${phid}" style="font-weight:500;color:var(--gold)">—</td>
+      <td class="r"><input type="number" class="ninput" id="${muid}" value="${p.mu}" min="1" step="1" oninput="P[${i}].mu=parseFloat(this.value)||1;updateProdRow(${i});calcResults()"></td>
+      <td class="r" id="${epmlid}" style="color:var(--ink-3)">—</td>
+    </tr>`;
+  }).join('');
+  updateAllProdRows();
+}
+
+function updateProdRow(i){
+  const p = P[i];
+  const ch = parseInt(document.getElementById('s-ch').value)/100;
+  const ph = phUnit(p,ch);
+  const eml = eurPerMl(p,ch);
+  document.getElementById(`p-ph-${i}`).textContent  = p.v>0 ? fE0(ph) : '—';
+  document.getElementById(`p-eml-${i}`).textContent = p.v>0&&p.mu>0 ? '€\u00a0'+eml.toFixed(3)+'/ml' : '—';
+}
+
+function updateAllProdRows(){
+  P.forEach((_,i)=>updateProdRow(i));
+  const ch = parseInt(document.getElementById('s-ch').value)/100;
+  const withPrice = P.filter(p=>p.v>0);
+  const avgV = withPrice.length ? withPrice.reduce((a,p)=>a+p.v,0)/withPrice.length : 0;
+  const avgH = withPrice.length ? withPrice.reduce((a,p)=>a+phUnit(p,ch),0)/withPrice.length : 0;
+  document.getElementById('p-vm').textContent = avgV>0 ? fE0(avgV) : '—';
+  document.getElementById('p-hm').textContent = avgH>0 ? fE0(avgH) : '—';
+}
+
+// ── RENDER TRATAMENTOS (uma vez) ─────────────────────────────────────────────
+function renderTratamentos(){
+  const container = document.getElementById('trat-container');
+  container.innerHTML = T.map((t,ti)=>{
+    const ingRows = t.ing.map((ing,ii)=>{
+      const p = pid(ing.pid);
+      if(!p) return '';
+      return `<tr>
+        <td>${p.n} ${badge(p.l,'info')}</td>
+        <td class="r"><input type="number" class="ninput" id="ti-${ti}-${ii}-i" value="${ing.mi}" min="0" step="1" oninput="T[${ti}].ing[${ii}].mi=parseFloat(this.value)||0;updateTratRow(${ti},${ii});calcResults()"> ml</td>
+        <td class="r"><input type="number" class="ninput" id="ti-${ti}-${ii}-c" value="${ing.mc}" min="0" step="1" oninput="T[${ti}].ing[${ii}].mc=parseFloat(this.value)||0;updateTratRow(${ti},${ii});calcResults()"> ml</td>
+        <td class="r" id="ti-${ti}-${ii}-tot" style="color:var(--ink-3)">—</td>
+        <td class="r" id="ti-${ti}-${ii}-eur" style="font-weight:500">—</td>
+      </tr>`;
+    }).join('');
+    return `<div class="trat-card">
+      <div class="trat-header" style="border-left:3px solid ${t.cor}">
+        <div>
+          <div class="trat-tipo" style="color:${t.cor}">${t.tipo}</div>
+          <div class="trat-nome">${t.n}</div>
+          <div class="trat-desc">${t.desc}</div>
+        </div>
+        <div class="trat-right">
+          <div style="font-size:10px;color:var(--ink-3)">Sessões/mês</div>
+          <input type="number" class="ninput" id="tsess-${ti}" value="${t.sess}" min="0" step="5" style="width:70px;font-size:1rem;text-align:center" oninput="T[${ti}].sess=parseInt(this.value)||0;updateTratFooter(${ti});calcResults()">
+          <div class="trat-cost-sub" id="trat-dist-${ti}">—</div>
+        </div>
+      </div>
+      <div class="trat-body">
+        <div class="table-wrap" style="margin:0;border-radius:0;border-left:none;border-right:none;border-top:none">
+          <table><thead><tr><th>Produto KOS</th><th class="r">ml / sessão individual</th><th class="r">ml / sessão casal</th><th class="r">Total ml/mês</th><th class="r">Custo EUR/mês</th></tr></thead>
+          <tbody>${ingRows}</tbody></table>
+        </div>
+      </div>
+      <div class="trat-footer">
+        <span style="color:var(--ink-2)">Total mensal: <strong id="trat-eur-${ti}">—</strong></span>
+        <span style="color:var(--ink-3)">·</span>
+        <span style="color:var(--ink-2)">Landed BRL: <strong id="trat-brl-${ti}">—</strong></span>
+      </div>
+    </div>`;
+  }).join('');
+  updateAllTratRows();
+}
+
+function updateTratRow(ti, ii){
+  const params = getParams();
+  const {pctCas, ch, cambio, cimp} = params;
+  const t = T[ti];
+  const ing = t.ing[ii];
+  const p = pid(ing.pid);
+  if(!p) return;
+  const sI = Math.round(t.sess*(1-pctCas)), sC = t.sess-sI;
+  const ml = ing.mi*sI + ing.mc*sC;
+  const eur = ml * eurPerMl(p,ch);
+  const el1 = document.getElementById(`ti-${ti}-${ii}-tot`);
+  const el2 = document.getElementById(`ti-${ti}-${ii}-eur`);
+  if(el1) el1.textContent = fN(ml) + ' ml';
+  if(el2) el2.textContent = p.v>0 ? fE(eur) : '—';
+}
+
+function updateTratFooter(ti){
+  const params = getParams();
+  const {pctCas, ch, cambio, cimp} = params;
+  const t = T[ti];
+  const sI = Math.round(t.sess*(1-pctCas)), sC = t.sess-sI;
+  let totEur = 0;
+  t.ing.forEach((ing,ii)=>{
+    const p = pid(ing.pid);
+    if(!p||p.v===0||p.mu===0) return;
+    const ml = ing.mi*sI + ing.mc*sC;
+    totEur += ml * eurPerMl(p,ch);
+  });
+  const elE = document.getElementById(`trat-eur-${ti}`);
+  const elB = document.getElementById(`trat-brl-${ti}`);
+  const elD = document.getElementById(`trat-dist-${ti}`);
+  if(elE) elE.textContent = fE(totEur);
+  if(elB) elB.textContent = fR(totEur*cambio*cimp);
+  if(elD) elD.textContent = `${sI} ind · ${sC} casal`;
+}
+
+function updateAllTratRows(){
+  T.forEach((t,ti)=>{
+    t.ing.forEach((_,ii)=>updateTratRow(ti,ii));
+    updateTratFooter(ti);
+  });
+}
+
+// ── CALC RESULTS (só atualiza outputs, nunca reconstrói inputs) ──────────────
+function calcResults(){
+  const params = getParams();
+  const {sess,pctCas,dias,ch,cambio,cimp,skus,tfvs,consult} = params;
+  const sC = Math.round(sess*pctCas), sI = sess-sC;
+
+  // sv labels
+  document.getElementById('sv-sess').textContent   = sess;
+  document.getElementById('sv-casal').textContent  = Math.round(pctCas*100)+'%';
+  document.getElementById('sv-dias').textContent   = dias;
+  document.getElementById('sv-ch').textContent     = Math.round(ch*100)+'%';
+  document.getElementById('sv-cambio').textContent = cambio.toFixed(2).replace('.',',');
+  document.getElementById('sv-cimp').textContent   = cimp.toFixed(2).replace('.',',')+'×';
+  document.getElementById('sv-skus').textContent   = skus;
+  document.getElementById('sv-tfvs').textContent   = 'R$'+tfvs.toLocaleString('pt-BR');
+  document.getElementById('sv-consult').textContent= fR(consult);
+
+  // rooms
+  document.getElementById('r-ind').textContent  = sI;
+  document.getElementById('r-cas1').textContent = Math.round(sC/2);
+  document.getElementById('r-cas2').textContent = Math.round(sC/2);
+
+  // vol metrics
+  document.getElementById('vol-metrics').innerHTML =
+    m('Sessões individuais/mês', sI) +
+    m('Sessões casal/mês', sC) +
+    m('Total sessões/mês', sess, '', 'warn') +
+    m('Pessoas atendidas/mês', sI+sC*2) +
+    m('Sessões/dia (média)', (sess/dias).toFixed(1));
+
+  // produtos médias
+  updateAllProdRows();
+
+  // tratamentos
+  updateAllTratRows();
+
+  // calcular total
+  let totEurMes = 0;
+  T.forEach(t=>{
+    const tI = Math.round(t.sess*(1-pctCas)), tC = t.sess-tI;
+    t.ing.forEach(ing=>{
+      const p = pid(ing.pid);
+      if(!p||p.v===0||p.mu===0) return;
+      totEurMes += (ing.mi*tI + ing.mc*tC) * eurPerMl(p,ch);
+    });
+  });
+  const totBrlMes = totEurMes*cambio*cimp;
+  const totEurAno = totEurMes*12;
+  const totBrlAno = totBrlMes*12;
+
+  // ANVISA
+  const anvTFVS = skus*tfvs;
+  const anvTot = anvTFVS+consult;
+  const anvEur = anvTot/cambio;
+  document.getElementById('m-tfvs').textContent    = fR(anvTFVS);
+  document.getElementById('m-consult').textContent = fR(consult);
+  document.getElementById('m-anv-brl').textContent = fR(anvTot);
+  document.getElementById('m-anv-eur').textContent = fE0(anvEur);
+
+  // decomp
+  document.getElementById('decomp-metrics').innerHTML =
+    m('Produto EUR/mês', fE0(totEurMes), 'preço hotel') +
+    m('Conversão BRL/mês', fR(totEurMes*cambio), `câmbio ${cambio.toFixed(2)}`) +
+    m('Custo importador/mês', fR(totEurMes*cambio*(cimp-1)), `${cimp.toFixed(2)}× sobre produto`) +
+    m('BRL landed/mês', fR(totBrlMes), '', 'danger') +
+    m('BRL landed/ano', fR(totBrlAno), '', 'danger') +
+    m('ANVISA ano 1 (BRL)', fR(anvTot), 'a definir quem paga', 'warn') +
+    m('ANVISA ano 1 (EUR)', fE0(anvEur), '', 'warn');
+
+  // header
+  document.getElementById('hdr-eur').textContent = fE0(totEurAno);
+
+  // resultado HL
+  document.getElementById('hl-box').innerHTML = `
+    <div>
+      <div class="hl-label">Consumo anual estimado — base negociação KOS</div>
+      <div class="hl-val">${fE0(totEurAno)} <span style="font-size:1.2rem;color:#9a9590">/ano</span></div>
+      <div class="hl-sub">${sess} sessões/mês · ${Math.round(pctCas*100)}% casal · hotel ${Math.round(ch*100)}% do varejo · câmbio ${cambio.toFixed(2)} · imp. ${cimp.toFixed(2)}×</div>
+    </div>
+    <div style="text-align:right">
+      <div class="hl-label">BRL landed / ano</div>
+      <div class="hl-val">${fR(totBrlAno)}</div>
+      <div class="hl-sub">${fR(totBrlMes)}/mês</div>
+    </div>`;
+
+  // res metrics
+  document.getElementById('res-metrics').innerHTML =
+    m('EUR/mês (preço hotel)', fE0(totEurMes), '', 'warn') +
+    m('BRL landed/mês', fR(totBrlMes), `coef. ${cimp.toFixed(2)}×`, 'danger') +
+    m('EUR/ano', fE0(totEurAno), '', 'warn') +
+    m('BRL landed/ano', fR(totBrlAno), '', 'danger') +
+    m('Custo/sessão', fR(totBrlMes/Math.max(sess,1)), 'landed médio') +
+    m('ANVISA ano 1', fE0(anvEur), 'a confirmar quem paga', 'gold');
+
+  // cenários
+  const VOLS = [{n:'Abertura',s:100},{n:'Atual',s:sess,cur:true},{n:'Pleno (250/mês)',s:250},{n:'Alta temporada',s:320}];
+  document.getElementById('sce-grid').innerHTML = VOLS.map(v=>{
+    let eur=0;
+    T.forEach(t=>{
+      const ratio=v.s/Math.max(sess,1);
+      const tI=Math.round(t.sess*ratio*(1-pctCas)),tC=Math.round(t.sess*ratio)-tI;
+      t.ing.forEach(ing=>{
+        const p=pid(ing.pid);
+        if(!p||p.v===0||p.mu===0)return;
+        eur+=(ing.mi*tI+ing.mc*tC)*eurPerMl(p,ch);
+      });
+    });
+    const brl=eur*cambio*cimp;
+    return `<div class="sce-card ${v.cur?'cur':''}"><div class="sce-tag">${v.n}</div><div class="sce-val">${fE0(eur*12)}/ano</div><div class="sce-sub">${v.s} sessões/mês</div><div class="sce-sub">${fR(brl)}/mês</div></div>`;
+  }).join('');
+
+  // comparativo
+  document.getElementById('comp-tbody').innerHTML = VOLS.map(v=>{
+    let eur=0;
+    T.forEach(t=>{
+      const ratio=v.s/Math.max(sess,1);
+      const tI=Math.round(t.sess*ratio*(1-pctCas)),tC=Math.round(t.sess*ratio)-tI;
+      t.ing.forEach(ing=>{
+        const p=pid(ing.pid);
+        if(!p||p.v===0||p.mu===0)return;
+        eur+=(ing.mi*tI+ing.mc*tC)*eurPerMl(p,ch);
+      });
+    });
+    const ano=eur*12;
+    const d5=ano-5000, d25=ano-25000;
+    return `<tr${v.cur?' style="background:var(--gold-l)"':''}>
+      <td>${v.n} (${v.s}/mês)</td>
+      <td class="r warn">${fE0(ano)}</td>
+      <td class="r">€ 5.000</td>
+      <td class="r">€ 25.000</td>
+      <td class="r ${d5<=0?'ok':'danger'}">${d5>0?'+':''}${fE0(d5)}</td>
+      <td class="r ${d25<=0?'ok':'danger'}">${d25>0?'+':''}${fE0(d25)}</td>
+    </tr>`;
+  }).join('') +
+  `<tr class="tot"><td colspan="6" style="font-size:10px;color:var(--ink-3);font-weight:400">Verde = consumo abaixo da proposta KOS (favorável ao Sofitel) · Vermelho = consumo acima</td></tr>`;
+
+  // argumento
+  const d5=totEurAno-5000, d25=totEurAno-25000;
+  document.getElementById('arg-box').innerHTML = `<div style="font-size:12px;line-height:2;color:var(--ink-2);display:grid;gap:4px">
+    <div>📌 Com <strong>${sess} sessões/mês</strong>, o consumo estimado de insumos KOS é de <strong>${fE0(totEurAno)}/ano</strong> ao preço hotel.</div>
+    <div>📌 O custo landed para o Sofitel (câmbio + importador) é de <strong>${fR(totBrlAno)}/ano</strong> — ou <strong>${fR(totBrlMes)}/mês</strong>.</div>
+    <div>📌 Proposta KOS de <strong>€5.000/ano</strong>: ${d5<=0?'<span style="color:var(--ok)">dentro do consumo estimado (favorável ao Sofitel)</span>':'<span style="color:var(--danger)">acima do consumo em '+fE0(Math.abs(d5))+'</span>'}.</div>
+    <div>📌 Proposta KOS de <strong>€25.000/ano</strong>: representa <strong>${fE0(Math.abs(d25))}</strong> ${d25>0?'a mais do que o consumo estimado':'abaixo do consumo'} (${Math.round(Math.abs(d25/totEurAno*100))}%).</div>
+    <div>📌 ANVISA estimada: <strong>${fE0(anvEur)}</strong> — argumento para a KOS absorver como custo de entrada no mercado brasileiro.</div>
+    <div>📌 O Sofitel é o <strong>único cliente KOS no Brasil</strong> — a operação deles no país depende deste contrato.</div>
+  </div>`;
+}
+
+function calc(){ calcResults(); }
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// INIT
+renderProdutos();
+renderTratamentos();
+calcResults();
+</script>
+</body>
+</html>
