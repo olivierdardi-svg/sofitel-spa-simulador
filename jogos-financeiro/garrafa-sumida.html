@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garrafa Sumida</title>
+<link rel="stylesheet" href="assets/estilo.css">
+<style>
+.caso{max-width:1500px;margin:0 auto}
+.cab{display:flex;justify-content:space-between;align-items:flex-end;gap:1em;flex-wrap:wrap;margin-bottom:.8em}
+.cab h2{font-family:var(--serif);font-size:2.4em;font-weight:500;line-height:1}
+.cab .local{color:var(--gold);font-size:.8em;letter-spacing:.12em;text-transform:uppercase}
+.pote{text-align:right}
+.pote b{font-family:var(--serif);font-size:2.4em;color:var(--gold-l);display:block;line-height:1}
+.pote span{font-size:.75em;color:var(--ink3)}
+.depo{display:flex;gap:.8em;align-items:flex-start;background:#0c0e13;border:1px dashed var(--gold-d);border-radius:var(--r);padding:.8em 1em;margin-bottom:1em;font-style:italic;color:var(--ink2)}
+.depo .lupa{font-size:2em;font-style:normal}
+.envelopes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:.9em}
+.env{border-radius:var(--r);min-height:7em;position:relative}
+.env.fechado{background:repeating-linear-gradient(45deg,#3b3222,#3b3222 12px,#43392a 12px,#43392a 24px);border:2px solid var(--gold-d);display:grid;place-items:center;text-align:center;cursor:pointer;transition:transform .15s}
+.env.fechado:hover{transform:translateY(-4px) rotate(-1deg)}
+.env.fechado .selo{font-size:2.2em}
+.env.fechado .rot{font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-l)}
+.env.fechado .custo{font-size:.75em;color:var(--ink3)}
+.env.aberto{background:#f3eee2;color:#1d1a14;border:1px solid #cfc6b0;padding:.7em .8em;box-shadow:0 6px 18px rgba(0,0,0,.35);animation:sobe .35s}
+.env.aberto h4{font-size:.85em;letter-spacing:.06em;text-transform:uppercase;color:#7a5c22;margin-bottom:.4em}
+.env table{width:100%;border-collapse:collapse;font-size:.85em}
+.env th{text-align:left;font-weight:700;border-bottom:2px solid #1d1a14;padding:.2em .3em}
+.env td{border-bottom:1px solid #d8cfb9;padding:.3em .3em}
+.env tr.linha{cursor:pointer}
+.env tr.linha:hover td{background:#ffe9a8}
+.env tr.acusada-errada td{background:#f7c4c0;text-decoration:line-through}
+.env tr.culpada td{background:#ffd75e;font-weight:700}
+.env tr.culpada td:first-child::before{content:"🔎 "}
+.instr{margin:1em 0 .4em;color:var(--ink2)}
+.instr b{color:var(--gold-l)}
+.barra-acoes{display:flex;justify-content:flex-end;gap:.6em;margin-top:1em;flex-wrap:wrap}
+.conta{font-family:'Courier New',monospace;background:#0c0e13;border-radius:10px;padding:.6em .8em;margin:.5em 0;color:#cfe8d8}
+.p2{margin-top:1em}
+.p2 .pergunta{font-family:var(--serif);font-size:1.6em;margin-bottom:.6em}
+</style>
+</head>
+<body>
+<div class="jogo">
+  <div class="topo">
+    <h1><small>Almoxarifado e A&amp;B · FIN-10 · FIN-42 · FIN-43</small>O Mistério da Garrafa Sumida</h1>
+    <div class="acoes">
+      <button class="btn-ico" id="btnAjuda">? Atalhos</button>
+      <button class="btn-ico" id="btnSom">🔊 Som</button>
+      <button class="btn-ico" id="btnTela">⛶ Tela cheia</button>
+      <a class="btn-ico" href="index.html" onclick="return Motor.irMenu()" style="text-decoration:none">☰ Menu</a>
+    </div>
+  </div>
+
+  <main class="palco">
+    <section class="abertura" id="telaAbertura">
+      <div class="titulo">O Mistério da <em>Garrafa Sumida</em></div>
+      <p class="muted">Todo produto que sai do estoque tem que aparecer como venda, cortesia ou perda, e o estoque da contabilidade tem que ser o que existe na prateleira. Cada caso é um sumiço no almoxarifado, na câmara fria ou num bar. O time é o detetive.</p>
+      <div class="cartao" style="font-family:'Courier New',monospace;text-align:center;font-size:1.2em">Consumo = Estoque inicial + Compras − Estoque final</div>
+      <ol>
+        <li>Cada caso vale até 400 pontos. Os 2 primeiros envelopes de pista são grátis; cada envelope a mais custa 50.</li>
+        <li>O time aponta a <b>linha</b> do documento onde a conta não fecha ou o controle falhou. O apresentador clica nela.</li>
+        <li>Acusação errada: −100 no pote, e o time tenta de novo. O pote nunca cai abaixo de 50.</li>
+        <li>Caso resolvido, pergunta-bônus: qual a regra que teria evitado o sumiço? Vale +100.</li>
+      </ol>
+      <div class="config">
+        <label>Casos: <select id="cfgQtd"></select></label>
+        <label><input type="checkbox" id="cfgAleat"> Ordem aleatória</label>
+      </div>
+      <div><button class="btn" id="btnComecar">Abrir o primeiro caso 🔎</button></div>
+    </section>
+
+    <section class="caso oculto" id="telaJogo">
+      <div class="cab">
+        <div>
+          <div class="local" id="local"></div>
+          <h2 id="titulo"></h2>
+          <div class="muted" id="vezTxt" style="font-size:.85em"></div>
+        </div>
+        <div class="pote"><b id="pote">400</b><span>pontos no pote</span></div>
+      </div>
+      <div class="depo"><span class="lupa">🕵️</span><span id="depo"></span></div>
+      <div class="envelopes" id="envelopes"></div>
+      <p class="instr" id="instr">Abra os envelopes e <b>clique na linha suspeita</b> que o time apontar.</p>
+      <div id="resposta"></div>
+      <div class="p2 oculto" id="p2">
+        <div class="pergunta" id="p2q"></div>
+        <div class="opcoes" id="p2op"></div>
+      </div>
+      <div class="barra-acoes">
+        <button class="btn sec" id="btnRevelar">Revelar a solução</button>
+        <button class="btn oculto" id="btnProx">Próximo caso ▶ (Espaço)</button>
+      </div>
+    </section>
+
+    <section id="telaFim" class="oculto"></section>
+  </main>
+
+  <div class="placar" id="placar"></div>
+</div>
+
+<script src="assets/motor.js"></script>
+<script src="dados/garrafa.js"></script>
+<script>
+(function () {
+  var D = window.DADOS_GARRAFA;
+  var $ = function (id) { return document.getElementById(id); };
+  var casos = [], idx = 0, pote = 400, abertos = 0, fase = 'pistas', op2 = [], revisao = [];
+
+  var sel = $('cfgQtd');
+  for (var n = 1; n <= D.length; n++) sel.innerHTML += '<option' + (n === Math.min(4, D.length) ? ' selected' : '') + '>' + n + '</option>';
+
+  $('btnComecar').onclick = function () {
+    casos = ($('cfgAleat').checked ? Motor.embaralhar(D) : D.slice()).slice(0, +sel.value);
+    $('telaAbertura').classList.add('oculto');
+    $('telaJogo').classList.remove('oculto');
+    idx = 0; mostrar();
+  };
+
+  function mostrar() {
+    var c = casos[idx];
+    pote = 400; abertos = 0; fase = 'pistas';
+    $('local').textContent = 'Caso ' + (idx + 1) + ' de ' + casos.length + ' · ' + c.local;
+    $('titulo').textContent = c.titulo;
+    $('depo').textContent = c.depoimento;
+    $('resposta').innerHTML = '';
+    $('p2').classList.add('oculto');
+    $('btnProx').classList.add('oculto');
+    $('btnRevelar').classList.remove('oculto');
+    $('instr').classList.remove('oculto');
+    $('vezTxt').innerHTML = 'Detetives da vez: <b style="color:' + Motor.timeAtivo().cor + '">' + Motor.esc(Motor.timeAtivo().nome) + '</b>';
+    $('envelopes').innerHTML = c.documentos.map(function (d, i) {
+      return '<div class="env fechado" data-d="' + i + '"><div><div class="selo">' + d.icone + '</div><div class="rot">Pista: ' + Motor.esc(d.tipo) + '</div><div class="custo" data-custo></div></div></div>';
+    }).join('');
+    atualizarPote();
+  }
+
+  function atualizarPote() {
+    $('pote').textContent = pote;
+    document.querySelectorAll('[data-custo]').forEach(function (el) { el.textContent = abertos < 2 ? 'grátis' : 'custa 50 pontos'; });
+  }
+
+  function abrirEnvelope(el) {
+    var c = casos[idx], i = +el.getAttribute('data-d'), d = c.documentos[i];
+    if (abertos >= 2 && fase === 'pistas') pote = Math.max(50, pote - 50);
+    abertos++;
+    Motor.som.clique();
+    var html = '<h4>' + d.icone + ' ' + Motor.esc(d.titulo) + '</h4><table><thead><tr>' +
+      d.colunas.map(function (t) { return '<th>' + Motor.esc(t) + '</th>'; }).join('') + '</tr></thead><tbody>';
+    d.linhas.forEach(function (l, k) {
+      html += '<tr class="linha" data-d="' + i + '" data-l="' + k + '">' + l.c.map(function (t) { return '<td>' + Motor.esc(t) + '</td>'; }).join('') + '</tr>';
+    });
+    html += '</tbody></table>';
+    el.className = 'env aberto';
+    el.innerHTML = html;
+    atualizarPote();
+  }
+
+  function acusar(tr) {
+    if (fase !== 'pistas') return;
+    var c = casos[idx];
+    var linha = c.documentos[+tr.getAttribute('data-d')].linhas[+tr.getAttribute('data-l')];
+    if (tr.classList.contains('acusada-errada')) return;
+    if (linha.culpada) {
+      Motor.pontuar(Motor.ativo, pote);
+      Motor.som.acerto();
+      resolver(true, '🔎 Caso resolvido! +' + pote + ' pontos para ' + Motor.timeAtivo().nome);
+    } else {
+      tr.classList.add('acusada-errada');
+      pote = Math.max(50, pote - 100);
+      atualizarPote();
+      Motor.som.erro();
+    }
+  }
+
+  function resolver(certo, titulo) {
+    fase = 'bonus';
+    var c = casos[idx];
+    // abre todos os envelopes e destaca as linhas culpadas
+    document.querySelectorAll('.env.fechado').forEach(abrirEnvelope);
+    document.querySelectorAll('tr.linha').forEach(function (tr) {
+      var l = c.documentos[+tr.getAttribute('data-d')].linhas[+tr.getAttribute('data-l')];
+      if (l.culpada) tr.classList.add('culpada');
+    });
+    $('instr').classList.add('oculto');
+    $('btnRevelar').classList.add('oculto');
+    $('resposta').innerHTML = '<div class="resposta' + (certo ? '' : ' mal') + '"><h3>' + Motor.esc(titulo) + '</h3>' +
+      '<div class="conta">' + Motor.esc(c.conta) + '</div><p>' + Motor.esc(c.explicacao) + '</p><span class="fin">' + Motor.esc(c.fin) + '</span></div>';
+    // pergunta-bônus
+    var q = c.pergunta2;
+    op2 = Motor.prepararOpcoes(q);
+    $('p2q').textContent = '⭐ Bônus (+100): ' + q.pergunta;
+    $('p2op').innerHTML = op2.map(function (o, i) {
+      return '<button class="opcao" data-i="' + i + '"><span class="tecla">' + (i + 1) + '</span><span>' + Motor.esc(o.txt) + '</span></button>';
+    }).join('');
+    $('p2').classList.remove('oculto');
+    Motor.mostrarNaTela($('p2'));
+    revisao.push({ situacao: c.titulo + ' (' + c.local + ')', resposta: c.conta, fin: c.fin });
+  }
+
+  function responderBonus(i) {
+    if (fase !== 'bonus' || i >= op2.length) return;
+    fase = 'fim';
+    var certa = op2[i].certa;
+    document.querySelectorAll('#p2op .opcao').forEach(function (b, k) {
+      b.disabled = true;
+      b.classList.add(op2[k].certa ? 'certa' : (k === i ? 'errada' : 'apagada'));
+    });
+    if (certa) { Motor.pontuar(Motor.ativo, 100); Motor.som.acerto(); } else Motor.som.erro();
+    $('btnProx').textContent = idx + 1 < casos.length ? 'Próximo caso ▶ (Espaço)' : 'Encerrar a investigação ▶';
+    $('btnProx').classList.remove('oculto');
+  }
+
+  function proximo() {
+    if (fase !== 'fim') return;
+    idx++;
+    if (idx >= casos.length) {
+      $('telaJogo').classList.add('oculto');
+      $('telaFim').classList.remove('oculto');
+      Motor.renderRevisao($('telaFim'), 'Investigação encerrada! Resultado da Garrafa Sumida', revisao);
+      return;
+    }
+    Motor.proximoTime();
+    mostrar();
+    window.scrollTo(0, 0);
+  }
+
+  $('envelopes').addEventListener('click', function (e) {
+    var env = e.target.closest('.env.fechado');
+    if (env && fase === 'pistas') { abrirEnvelope(env); return; }
+    var tr = e.target.closest('tr.linha');
+    if (tr) acusar(tr);
+  });
+  $('p2op').addEventListener('click', function (e) {
+    var b = e.target.closest('.opcao'); if (b) responderBonus(+b.getAttribute('data-i'));
+  });
+  $('btnRevelar').onclick = function () {
+    if (fase !== 'pistas') return;
+    Motor.som.buzina();
+    resolver(false, '🕵️ Solução revelada (sem pontos)');
+  };
+  $('btnProx').onclick = proximo;
+
+  Motor.iniciarPagina(function (e, k) {
+    if ($('telaJogo').classList.contains('oculto')) {
+      if ((k === 'enter' || k === ' ') && !$('telaAbertura').classList.contains('oculto')) { e.preventDefault(); $('btnComecar').click(); }
+      return;
+    }
+    if (k >= '1' && k <= '4') responderBonus(+k - 1);
+    else if (k === ' ' || k === 'enter') { e.preventDefault(); proximo(); }
+  }, [['Clique', 'Abrir envelope / apontar a linha suspeita'], ['1–4', 'Responder a pergunta-bônus'], ['Espaço', 'Próximo caso']]);
+})();
+</script>
+</body>
+</html>

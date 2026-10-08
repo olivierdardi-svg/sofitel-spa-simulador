@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Balcão do Fornecedor</title>
+<link rel="stylesheet" href="assets/estilo.css">
+<link rel="stylesheet" href="assets/mec-paciencia.css">
+</head>
+<body>
+<div class="jogo">
+  <div class="topo">
+    <h1><small>Compras · FIN-40 · FIN-41 · FIN-03 · FIN-51</small>Balcão do Fornecedor</h1>
+    <div class="acoes">
+      <button class="btn-ico" id="btnAjuda">? Atalhos</button>
+      <button class="btn-ico" id="btnSom">🔊 Som</button>
+      <button class="btn-ico" id="btnTela">⛶ Tela cheia</button>
+      <a class="btn-ico" href="index.html" onclick="return Motor.irMenu()" style="text-decoration:none">☰ Menu</a>
+    </div>
+  </div>
+
+  <main class="palco" id="palco">
+    <section class="abertura" id="telaAbertura">
+      <div class="titulo">Balcão do <em>Fornecedor</em></div>
+      <p class="muted">Pré-abertura. Todo fornecedor da cidade quer vender para o hotel novo, e cada um chega com um "jeitinho". O time da vez é Compras e Contas a Pagar: tem que responder certo antes que o fornecedor perca a paciência.</p>
+      <ol>
+        <li>Um fornecedor chega por vez. A barra de paciência começa a cair.</li>
+        <li>O time da vez discute e diz a letra. O apresentador clica (ou tecla 1 a 4).</li>
+        <li>Acertou: 100 pontos + bônus pela paciência que sobrou (até +100).</li>
+        <li>Errou ou o tempo acabou: o fornecedor explode e a resposta certa aparece. O apresentador pode dar o roubo (+50) para outro time no placar.</li>
+        <li>A cada fornecedor, a vez passa para o próximo time.</li>
+      </ol>
+      <div class="config">
+        <label>Fornecedores: <select id="cfgQtd"></select></label>
+        <label>Paciência (segundos): <select id="cfgSeg"><option>30</option><option selected>45</option><option>60</option><option>90</option></select></label>
+        <label><input type="checkbox" id="cfgAleat" checked> Ordem aleatória</label>
+      </div>
+      <div><button class="btn" id="btnComecar">Abrir o balcão de Compras ▶</button></div>
+    </section>
+
+    <section class="mesa oculto" id="telaJogo">
+      <div class="hospede" id="hospede"></div>
+      <div>
+        <div class="paciencia" id="paciencia">
+          <span class="rosto" id="rosto">😊</span>
+          <div class="trilho"><div class="barra" id="barra"></div></div>
+          <span class="seg" id="seg">45</span>
+        </div>
+        <div class="contador" id="contador"></div>
+        <div class="pergunta" id="pergunta"></div>
+        <div class="opcoes" id="opcoes"></div>
+        <div id="resposta"></div>
+        <div class="barra-acoes">
+          <button class="btn sec" id="btnPausa">⏸ Pausar (P)</button>
+          <button class="btn oculto" id="btnProx">Próximo fornecedor ▶ (Espaço)</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="telaFim" class="oculto"></section>
+  </main>
+
+  <div class="placar" id="placar"></div>
+</div>
+
+<script src="assets/motor.js"></script>
+<script src="dados/fornecedor.js"></script>
+<script>
+window.CFG_JOGO = {
+  dados: window.DADOS_FORNECEDOR,
+  item: 'Fornecedor',
+  acerto: '✔ Fornecedor atendido dentro da regra!',
+  tempo: '⏰ O fornecedor perdeu a paciência!',
+  proximo: 'Próximo fornecedor',
+  ultimo: 'Fechar o balcão e ver o placar',
+  tituloFim: 'Balcão fechado! Resultado do Balcão do Fornecedor'
+};
+</script>
+<script src="assets/mec-paciencia.js"></script>
+</body>
+</html>
