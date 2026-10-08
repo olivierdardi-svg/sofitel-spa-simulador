@@ -1,4 +1,4 @@
-/* Jogo 1 · Check-in do Caos · Recepção / Front Office (FIN-10 a FIN-16)
+/* Outros setores · Check-in do Caos · Recepção / Front Office (FIN-10 a FIN-16)
    Todos os personagens são fictícios. Para trocar o emoji por uma foto,
    coloque o arquivo em midia/ e preencha "midia": "midia/arquivo.jpg".
    "correta" é o índice (começando em 0) da opção certa; a ordem é embaralhada na tela. */

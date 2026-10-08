@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Check-in do Caos</title>
+<title>Balcão do Fornecedor</title>
 <link rel="stylesheet" href="assets/estilo.css">
 <link rel="stylesheet" href="assets/mec-paciencia.css">
 </head>
 <body>
 <div class="jogo">
   <div class="topo">
-    <h1><small>Outros setores · Recepção / Front Office · FIN-10 a FIN-16</small>Check-in do Caos</h1>
+    <h1><small>Compras · FIN-40 · FIN-41 · FIN-03 · FIN-51</small>Balcão do Fornecedor</h1>
     <div class="acoes">
       <button class="btn-ico" id="btnAjuda">? Atalhos</button>
       <button class="btn-ico" id="btnSom">🔊 Som</button>
@@ -21,21 +21,21 @@
 
   <main class="palco" id="palco">
     <section class="abertura" id="telaAbertura">
-      <div class="titulo">Check-in do <em>Caos</em></div>
-      <p class="muted">Sexta-feira, 18h. O lobby lotou e cada hóspede chega com uma ideia "criativa". O time da vez tem que dar a resposta certa antes que o hóspede perca a paciência.</p>
+      <div class="titulo">Balcão do <em>Fornecedor</em></div>
+      <p class="muted">Pré-abertura. Todo fornecedor da cidade quer vender para o hotel novo, e cada um chega com um "jeitinho". O time da vez é Compras e Contas a Pagar: tem que responder certo antes que o fornecedor perca a paciência.</p>
       <ol>
-        <li>Um hóspede chega por vez. A barra de paciência começa a cair.</li>
+        <li>Um fornecedor chega por vez. A barra de paciência começa a cair.</li>
         <li>O time da vez discute e diz a letra. O apresentador clica (ou tecla 1 a 4).</li>
         <li>Acertou: 100 pontos + bônus pela paciência que sobrou (até +100).</li>
-        <li>Errou ou o tempo acabou: o hóspede explode e a resposta certa aparece. O apresentador pode dar o roubo (+50) para outro time no placar.</li>
-        <li>A cada hóspede, a vez passa para o próximo time.</li>
+        <li>Errou ou o tempo acabou: o fornecedor explode e a resposta certa aparece. O apresentador pode dar o roubo (+50) para outro time no placar.</li>
+        <li>A cada fornecedor, a vez passa para o próximo time.</li>
       </ol>
       <div class="config">
-        <label>Hóspedes: <select id="cfgQtd"></select></label>
+        <label>Fornecedores: <select id="cfgQtd"></select></label>
         <label>Paciência (segundos): <select id="cfgSeg"><option>30</option><option selected>45</option><option>60</option><option>90</option></select></label>
         <label><input type="checkbox" id="cfgAleat" checked> Ordem aleatória</label>
       </div>
-      <div><button class="btn" id="btnComecar">Abrir as portas do lobby ▶</button></div>
+      <div><button class="btn" id="btnComecar">Abrir o balcão de Compras ▶</button></div>
     </section>
 
     <section class="mesa oculto" id="telaJogo">
@@ -52,7 +52,7 @@
         <div id="resposta"></div>
         <div class="barra-acoes">
           <button class="btn sec" id="btnPausa">⏸ Pausar (P)</button>
-          <button class="btn oculto" id="btnProx">Próximo hóspede ▶ (Espaço)</button>
+          <button class="btn oculto" id="btnProx">Próximo fornecedor ▶ (Espaço)</button>
         </div>
       </div>
     </section>
@@ -64,16 +64,16 @@
 </div>
 
 <script src="assets/motor.js"></script>
-<script src="dados/checkin.js"></script>
+<script src="dados/fornecedor.js"></script>
 <script>
 window.CFG_JOGO = {
-  dados: window.DADOS_CHECKIN,
-  item: 'Hóspede',
-  acerto: '✔ Hóspede atendido!',
-  tempo: '⏰ O hóspede perdeu a paciência!',
-  proximo: 'Próximo hóspede',
-  ultimo: 'Fechar o lobby e ver o placar',
-  tituloFim: 'Lobby fechado! Resultado do Check-in do Caos'
+  dados: window.DADOS_FORNECEDOR,
+  item: 'Fornecedor',
+  acerto: '✔ Fornecedor atendido dentro da regra!',
+  tempo: '⏰ O fornecedor perdeu a paciência!',
+  proximo: 'Próximo fornecedor',
+  ultimo: 'Fechar o balcão e ver o placar',
+  tituloFim: 'Balcão fechado! Resultado do Balcão do Fornecedor'
 };
 </script>
 <script src="assets/mec-paciencia.js"></script>

@@ -1,0 +1,47 @@
+/* Mecânica "tabuleiro": cartas que vão para a coluna boa ou ruim. Usada por Corrida contra o Aging e Fechamento do Mês. */
+.mesa{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:1.4em;max-width:1500px;margin:0 auto;align-items:start}
+.tabuleiro{display:grid;gap:.7em}
+.coluna{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.6em .8em;min-height:5em}
+.coluna h3{font-size:.75em;letter-spacing:.12em;text-transform:uppercase;display:flex;justify-content:space-between}
+.coluna.rec h3{color:var(--ok)}
+.coluna.venc h3{color:var(--erro)}
+.coluna .soma{font-family:var(--serif);font-size:1.6em;font-weight:600}
+.fichas{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.3em}
+.fichinha{font-size:.65em;background:var(--surface2);border-radius:6px;padding:.1em .5em;animation:sobe .4s}
+.coluna.rec .fichinha{border-left:3px solid var(--ok)}
+.coluna.venc .fichinha{border-left:3px solid var(--erro)}
+.indic{background:#0c0e13;border:1px solid var(--border);border-radius:var(--r);padding:.6em .8em;text-align:center}
+.indic b{font-family:var(--serif);font-size:2.2em;display:block;line-height:1}
+.indic span{font-size:.7em;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase}
+.fatura{background:#f3eee2;color:#1d1a14;border-radius:var(--r);padding:1em 1.2em;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:chega .5s ease-out}
+@keyframes chega{from{opacity:0;transform:translateY(-30px) rotate(-2deg)}to{opacity:1;transform:none}}
+.fatura .topo-f{display:flex;justify-content:space-between;align-items:flex-start;gap:1em;border-bottom:2px dashed #b9ad92;padding-bottom:.5em;margin-bottom:.6em}
+.fatura .cli{font-family:var(--serif);font-size:1.6em;font-weight:600;line-height:1.05}
+.fatura .val{font-family:var(--serif);font-size:1.8em;font-weight:600;color:#7a5c22;white-space:nowrap}
+.fatura .pergunta{font-size:1.25em;font-weight:500}
+.dias{display:flex;align-items:center;gap:.8em;margin:.8em 0}
+.dias .trilho{flex:1;height:1em;border-radius:999px;background:#ddd3bd;overflow:hidden;position:relative}
+.dias .barra{height:100%;width:0;background:linear-gradient(90deg,#3fb27f,#e8a93a 66%,#e0564f);transition:width .25s linear}
+.dias .marca{position:absolute;top:-.2em;bottom:-.2em;width:2px;background:#1d1a14;opacity:.4}
+.dias .num{font-family:'Courier New',monospace;font-weight:700;font-size:1.4em;min-width:5.5em;text-align:right}
+.carimbo{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%) rotate(-14deg);font-family:var(--serif);font-weight:700;font-size:2.6em;letter-spacing:.06em;white-space:nowrap;border:6px solid;border-radius:12px;padding:0 .4em;opacity:.85;pointer-events:none;animation:carimba .35s ease-out}
+.carimbo.pago{color:#2d8a5f;border-color:#2d8a5f}
+.carimbo.vencido{color:#c0392b;border-color:#c0392b}
+@keyframes carimba{from{transform:translate(-50%,-50%) rotate(-14deg) scale(2.2);opacity:0}to{transform:translate(-50%,-50%) rotate(-14deg) scale(1);opacity:.85}}
+.fatura .opcoes .opcao{background:#fff;color:#1d1a14;border-color:#cfc6b0}
+.fatura .opcoes .opcao .tecla{background:#1d1a14}
+.fatura .opcoes .opcao.certa{background:#d5f0e2;border-color:#2d8a5f}
+.fatura .opcoes .opcao.errada{background:#f7d4d0;border-color:#c0392b}
+.seq{display:grid;gap:.5em}
+.seq .pool,.seq .montada{display:grid;gap:.4em}
+.passo{display:flex;gap:.6em;align-items:center;text-align:left;background:#fff;color:#1d1a14;border:2px solid #cfc6b0;border-radius:10px;padding:.45em .7em;font-size:.95em}
+.passo:hover{border-color:#7a5c22}
+.passo .n{flex:none;width:1.7em;height:1.7em;border-radius:50%;background:#1d1a14;color:#f3eee2;display:grid;place-items:center;font-weight:700;font-size:.85em}
+.passo.usado{opacity:.3;pointer-events:none}
+.passo.certo{border-color:#2d8a5f;background:#d5f0e2}
+.passo.errado{border-color:#c0392b;background:#f7d4d0}
+.vazio{border:2px dashed #b9ad92;border-radius:10px;padding:.45em .7em;color:#8a8170;font-size:.9em}
+.rot{font-size:.7em;letter-spacing:.12em;text-transform:uppercase;color:#7a5c22;margin-top:.3em}
+.barra-acoes{display:flex;justify-content:flex-end;gap:.6em;margin-top:1em;flex-wrap:wrap}
+.vez{color:var(--ink3);font-size:.8em;margin-bottom:.4em}
+@media (max-width:900px){.mesa{grid-template-columns:1fr}}

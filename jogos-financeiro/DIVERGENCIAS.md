@@ -29,6 +29,13 @@ O PDF do **FOCUS 2025** e a pasta `midia/` não estavam lá. Por isso:
 | Nova consulta de crédito: 6 meses (agências, operadoras, aéreas, PMEs), 1 ano (demais) | FIN-30 | Corrida contra o Aging |
 | Faturar em até 48h após a saída | FIN-32 | Corrida contra o Aging |
 | Aging acima de 45 dias como indicador do mês | FIN-32 | Corrida contra o Aging |
+| Fornecedor não homologado: 3 cotações, documentos legais, Carta de Compras Responsáveis, cláusula CSR, lista aprovada | FIN-40 | Balcão do Fornecedor · `dados/fornecedor.js` |
+| Nota com data antiga volta ao fornecedor; só nota original é lançada | FIN-41 | Balcão do Fornecedor |
+| Itens sem giro há mais de 90 dias: lista para vender primeiro | FIN-42 | Garrafa Sumida · `dados/garrafa.js` |
+| Telas bloqueiam após 15 minutos sem uso; senhas a cada 3 meses | FIN-02 | Fuga do Cofre, Fechamento do Mês |
+| Conta bancária parada há 3 meses: encerrar | FIN-50 | Fechamento do Mês · `dados/fechamento.js` |
+| Pendências contábeis com mais de 2 meses resolvidas com o centro contábil | FIN-50 | Fechamento do Mês |
+| Nota da auditoria: acima de 70% satisfatório, abaixo de 50% não antecipa fraude | Livro, p. 02 | Fechamento do Mês |
 
 ## 2. Pontos do próprio Livro que merecem confirmação
 
@@ -43,12 +50,22 @@ Não são contradições claras, mas podem confundir a equipe. Vale conferir no 
 3. **Amostra do consumo x vendas.** FIN-43 traz "5 alimentos por mês, incluindo proteínas" e
    "15 bebidas por mês". Não foi usado em pergunta, mas é número que vale conferir.
 
+4. **O que fazer na doca com temperatura, validade ou aspecto fora do padrão.** O FIN-40 manda
+   conferir temperatura, validade e aspecto no recebimento, mas só diz o que fazer com divergência
+   de quantidade e preço (anotar e pedir nota de crédito). Por isso a Doca de Recebimento não tem
+   nenhuma entrega com produto vencido ou fora da temperatura: a resposta seria inventada.
+   Vale conferir no FOCUS se ele diz "recusar".
+
 ## 3. Interpretações feitas nos jogos (não são regra escrita no Livro)
 
 - **Doca de Recebimento, botão "Alerta de controle".** O Livro diz o que é proibido (quem compra
   não recebe; dado bancário só muda com duas aprovações; compra precisa de pedido aprovado), mas
   não diz o que a doca faz na hora. O jogo agrupa esses casos como "alerta de controle", sem
   inventar um procedimento novo.
+- **OPEX ou CAPEX (Fechamento do Mês).** O Livro dá o critério (natureza, valor e vida útil) e
+  exemplos. As cartas usam só casos que caem direto nos exemplos: substituição integral (CAPEX),
+  reparo parcial (OPEX), treinamento e gastos pré-operacionais (OPEX). Casos de fronteira dependem
+  de valor e vida útil, que o Livro não fixa.
 - **Garrafa Sumida.** As quantidades de garrafas são cenário fictício. As regras testadas
   (mesas abertas, requisição com três papéis, cortesia lançada no PDV, perda validada, par stock,
   inventário às cegas) estão no FIN-10, FIN-42 e FIN-43.

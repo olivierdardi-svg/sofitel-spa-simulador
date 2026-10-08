@@ -1,4 +1,4 @@
-/* Jogo 4 · Doca de Recebimento · Compras e Almoxarifado (FIN-40, FIN-41, FIN-42)
+/* Jogo · Doca de Recebimento · Recebimento (FIN-40, FIN-41, FIN-42)
    Ações possíveis em "correta":
      aceitar     tudo confere com pedido e nota
      recusar     a mercadoria não entra
@@ -101,5 +101,37 @@ window.DADOS_DOCA = [
     correta: 'aceitar',
     explicacao: 'Confere com o pedido em produto, preço, peso, validade, temperatura e aspecto. Pressa do entregador não muda a rotina: carimbo, data e nome legível na nota.',
     fin: 'FIN-40'
+  },
+  {
+    produto: 'Água mineral', icone: '💧', fornecedor: 'Fonte Serra Clara (fictícia, homologada)', midia: '',
+    pedido: '10 fardos', nota: '15 fardos', chegou: '15 fardos contados',
+    detalhe: 'O entregador: "Trouxe a mais porque vocês sempre acabam pedindo de novo."',
+    correta: 'divergencia',
+    explicacao: 'A conferência é contra o PEDIDO, não contra a nota. Chegou e foi cobrado mais do que o pedido aprovado: divergência anotada na nota e nota de crédito pedida ao fornecedor.',
+    fin: 'FIN-40'
+  },
+  {
+    produto: 'Vinagre balsâmico', icone: '🫗', fornecedor: 'Empório Modena Sul (fictícia)', midia: '',
+    pedido: '12 frascos · marca Aceto Real', nota: '12 frascos · marca Aceto Real', chegou: '12 frascos · marca Campo Verde',
+    detalhe: 'O entregador: "É a mesma coisa, só muda o rótulo."',
+    correta: 'divergencia',
+    explicacao: 'No recebimento confere-se o PRODUTO contra o pedido, não só a quantidade. Produto diferente do pedido: divergência anotada e tratada com o fornecedor.',
+    fin: 'FIN-40'
+  },
+  {
+    produto: 'Cerveja artesanal', icone: '🍺', fornecedor: 'Cervejaria Onda Leve (fictícia, homologada)', midia: '',
+    pedido: '5 caixas', nota: '5 caixas', chegou: '(entregue direto no bar da piscina)',
+    detalhe: 'O bar recebeu as caixas sem passar pela área de recebimento. Ninguém do recebimento contou.',
+    correta: 'alerta',
+    explicacao: 'Toda entrega passa pela área única de recebimento, conferida por quem não comprou. Depois, sai para o bar por requisição, com solicitante, aprovador e recebedor identificados.',
+    fin: 'FIN-40 · FIN-42'
+  },
+  {
+    produto: 'Whisky 12 anos', icone: '🥃', fornecedor: 'Importadora Highland (fictícia, homologada)', midia: '',
+    pedido: '24 garrafas', nota: '24 garrafas', chegou: '24 garrafas contadas',
+    detalhe: 'Tudo conferido às 21h. As caixas vão passar a noite na doca, com a porta aberta, "porque o almoxarifado já fechou".',
+    correta: 'alerta',
+    explicacao: 'Almoxarifado, câmaras e bares trancados fora do expediente; chaves retiradas e devolvidas com testemunha e livro. Álcool e itens caros ficam em área trancada separada.',
+    fin: 'FIN-42'
   }
 ];

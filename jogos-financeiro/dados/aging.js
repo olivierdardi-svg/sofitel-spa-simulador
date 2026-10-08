@@ -1,4 +1,4 @@
-/* Jogo 5 · Corrida contra o Aging · Crédito e Cobrança (FIN-30 a FIN-32)
+/* Outros setores · Corrida contra o Aging · Crédito e Cobrança (FIN-30 a FIN-32)
    Cada carta é uma fatura de um cliente fictício. Acertou: a fatura é recebida.
    Errou: ela escorrega para "+45 dias" no aging.
    tipo "escolha": opcoes + correta (índice).

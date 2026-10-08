@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gera demo-offline.html: os 5 jogos num único arquivo, sem depender de internet
+"""Gera demo-offline.html: todos os jogos num único arquivo, sem depender de internet
 nem das pastas assets/ e dados/.
 
 Uso (a partir de qualquer pasta):
@@ -12,7 +12,8 @@ import re
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-JOGOS = ['checkin-do-caos', 'fuga-do-cofre', 'garrafa-sumida', 'doca-de-recebimento', 'corrida-do-aging']
+JOGOS = ['balcao-do-fornecedor', 'doca-de-recebimento', 'garrafa-sumida', 'fuga-do-cofre', 'fechamento-do-mes',
+         'checkin-do-caos', 'corrida-do-aging']
 
 
 def ler(rel):
@@ -26,8 +27,10 @@ def css_offline():
 
 def embutir(html):
     """Troca <link> e <script src> pelo conteúdo dos arquivos."""
-    html = html.replace('<link rel="stylesheet" href="assets/estilo.css">',
-                        '<style>\n' + css_offline() + '\n</style>')
+    def estilo(m):
+        css = css_offline() if m.group(1) == 'assets/estilo.css' else ler(m.group(1))
+        return '<style>\n' + css + '\n</style>'
+    html = re.sub(r'<link rel="stylesheet" href="([^"]+)">', estilo, html)
 
     def script(m):
         codigo = ler(m.group(1)).replace('</script', '<\\/script')

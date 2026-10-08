@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fechamento do Mês</title>
+<link rel="stylesheet" href="assets/estilo.css">
+<link rel="stylesheet" href="assets/mec-tabuleiro.css">
+</head>
+<body>
+<div class="jogo">
+  <div class="topo">
+    <h1><small>Controladoria · FIN-00 a FIN-03 · FIN-50 a FIN-52</small>Fechamento do Mês</h1>
+    <div class="acoes">
+      <button class="btn-ico" id="btnAjuda">? Atalhos</button>
+      <button class="btn-ico" id="btnSom">🔊 Som</button>
+      <button class="btn-ico" id="btnTela">⛶ Tela cheia</button>
+      <a class="btn-ico" href="index.html" onclick="return Motor.irMenu()" style="text-decoration:none">☰ Menu</a>
+    </div>
+  </div>
+
+  <main class="palco">
+    <section class="abertura" id="telaAbertura">
+      <div class="titulo">Fechamento <em>do Mês</em></div>
+      <p class="muted">Último dia do mês. A pasta de fechamento precisa de cada conciliação datada e assinada. Cada carta é uma tarefa da Controladoria: resposta certa, a tarefa fica "Conciliada"; errada ou fora do prazo, vira "Pendência".</p>
+      <ol>
+        <li>Cartas de escolha: o time diz a letra (teclas 1 a 4).</li>
+        <li>Cartas de sequência: o time dita a ordem dos passos e o apresentador clica um por um. Depois, "Conferir ordem".</li>
+        <li>Acertou: 100 pontos e a tarefa vai para "Conciliado". Errou: vira "Pendência". Roubo (+50) pelo placar, a critério do apresentador.</li>
+        <li>No fim, o tabuleiro mostra quantas tarefas fecharam e quantas ficaram pendentes.</li>
+      </ol>
+      <div class="config">
+        <label>Tarefas: <select id="cfgQtd"></select></label>
+        <label>Tempo por tarefa: <select id="cfgSeg"><option value="30">30 s</option><option value="45" selected>45 s</option><option value="60">60 s</option><option value="90">90 s</option></select></label>
+        <label><input type="checkbox" id="cfgAleat" checked> Ordem aleatória</label>
+      </div>
+      <div><button class="btn" id="btnComecar">Abrir a pasta de fechamento ▶</button></div>
+    </section>
+
+    <section class="mesa oculto" id="telaJogo">
+      <aside class="tabuleiro">
+        <div class="coluna"><h3><span>📬 Em aberto</span><span id="qAberto"></span></h3></div>
+        <div class="coluna rec"><h3><span>✓ Conciliado</span><span class="soma" id="sRec">0</span></h3><div class="fichas" id="fRec"></div></div>
+        <div class="coluna venc"><h3><span>⚠ Pendência</span><span class="soma" id="sVenc">0</span></h3><div class="fichas" id="fVenc"></div></div>
+        <div class="indic"><b id="pct">0%</b><span>das tarefas ficaram pendentes</span></div>
+      </aside>
+      <div>
+        <div class="vez" id="vezTxt"></div>
+        <div class="fatura" id="fatura"></div>
+        <div id="resposta"></div>
+        <div class="barra-acoes">
+          <button class="btn sec" id="btnPausa">⏸ Parar o relógio (P)</button>
+          <button class="btn oculto" id="btnProx">Próxima tarefa ▶ (Espaço)</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="telaFim" class="oculto"></section>
+  </main>
+
+  <div class="placar" id="placar"></div>
+</div>
+
+<script src="assets/motor.js"></script>
+<script src="dados/fechamento.js"></script>
+<script>
+window.CFG_JOGO = {
+  dados: window.DADOS_FECHAMENTO,
+  item: 'Tarefa', itemPlural: 'tarefas', moeda: false, marca: false,
+  relogio: function (p) { return p >= 1 ? 'prazo!' : Math.round(p * 100) + '% do prazo'; },
+  carimboOk: 'CONCILIADO', carimboMal: 'PENDENTE',
+  acerto: '✔ Conciliado e assinado!', erro: '✘ Virou pendência', tempo: '⏰ O prazo do fechamento acabou!',
+  proximo: 'Próxima tarefa', ultimo: 'Fechar o mês e ver o placar',
+  tituloFim: function (ok, mal, pct) { return 'Mês fechado! ' + ok + ' tarefas conciliadas · ' + mal + ' pendências (' + pct + '%)'; }
+};
+</script>
+<script src="assets/mec-tabuleiro.js"></script>
+</body>
+</html>

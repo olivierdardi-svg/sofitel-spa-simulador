@@ -1,4 +1,4 @@
-/* Jogo 2 · Fuga do Cofre · Caixa e Tesouraria (FIN-20 a FIN-25)
+/* Jogo · Fuga do Cofre · Tesouraria e Governança (FIN-01, FIN-02, FIN-20 a FIN-25, regras de ouro)
    Cada cadeado é uma pergunta. "tipo": "vf" mostra só Verdadeiro/Falso
    (opcoes: ['Verdadeiro','Falso'], correta 0 ou 1). */
 window.DADOS_COFRE = [
@@ -167,5 +167,101 @@ window.DADOS_COFRE = [
     correta: 1,
     explicacao: 'Falso. Certificação PCI DSS de todos os envolvidos, renovada todo ano na plataforma VigiTrust.',
     fin: 'FIN-25'
+  },
+  {
+    cadeado: 'O cadeado das duas chaves', icone: '🗝️',
+    pergunta: 'Segregação de funções. Quem altera o dado bancário de um fornecedor...',
+    opcoes: [
+      '...pode aprovar o pagamento, se conferir duas vezes.',
+      '...não aprova o pagamento.',
+      '...aprova o pagamento sozinho, para ganhar tempo.',
+      '...só precisa avisar o fornecedor.'
+    ],
+    correta: 1,
+    explicacao: 'Quem altera dado bancário não aprova o pagamento. Quem manuseia dinheiro não altera o PMS nem lança na contabilidade. Quem compra não recebe nem lança a nota. Quem prepara a folha não autoriza o pagamento.',
+    fin: 'Regras de ouro · FIN-41'
+  },
+  {
+    cadeado: 'O cadeado do caixa que lança', icone: '💼',
+    tipo: 'vf',
+    pergunta: 'Quem fecha o caixa pode corrigir o valor no PMS e fazer o lançamento contábil da diferença, para agilizar.',
+    opcoes: ['Verdadeiro', 'Falso'],
+    correta: 1,
+    explicacao: 'Falso. Quem manuseia dinheiro não altera o PMS nem lança na contabilidade. Diferença de caixa: explicar, informar a contabilidade e corrigir em até 48h.',
+    fin: 'Regras de ouro · FIN-21'
+  },
+  {
+    cadeado: 'O cadeado da equipe pequena', icone: '👥',
+    pergunta: 'Na pré-abertura a equipe é pequena demais para separar todas as funções. O que o procedimento manda?',
+    opcoes: [
+      'Ignorar a segregação até a equipe crescer.',
+      'O GM ou Controller define por escrito um controle compensatório, com revisão por terceiro.',
+      'Cada um confere o próprio trabalho com mais atenção.',
+      'Pedir à auditoria para não avaliar esse ponto.'
+    ],
+    correta: 1,
+    explicacao: 'Equipe pequena demais para separar? O GM ou Controller define por escrito um controle compensatório, com revisão por terceiro, escrito e assinado.',
+    fin: 'Regras de ouro · FIN-02'
+  },
+  {
+    cadeado: 'O cadeado do post-it', icone: '🟨',
+    tipo: 'vf',
+    pergunta: 'Pode deixar a senha do PMS num post-it no monitor, desde que seja trocada a cada 3 meses.',
+    opcoes: ['Verdadeiro', 'Falso'],
+    correta: 1,
+    explicacao: 'Falso. Senhas trocadas a cada 3 meses e NUNCA anotadas à vista. Telas bloqueiam após 15 minutos sem uso; cada um sai do sistema ao fim do turno.',
+    fin: 'FIN-02'
+  },
+  {
+    cadeado: 'O cadeado da carta de cortesia', icone: '✉️',
+    pergunta: 'Quem pode conceder uma cortesia?',
+    opcoes: [
+      'Qualquer gerente, de boca.',
+      'Quem tem carta individual com nome e limite mensal, conforme a matriz de alçadas assinada pelo GM.',
+      'Qualquer pessoa, se o cliente for importante.',
+      'Só o hóspede pode pedir; ninguém precisa conceder.'
+    ],
+    correta: 1,
+    explicacao: 'Matriz de alçadas assinada pelo GM, com nome e cargo de cada autorizado. Carta individual para quem concede cortesia e para quem tem consumo interno, com nome e limite mensal.',
+    fin: 'FIN-01'
+  },
+  {
+    cadeado: 'O cadeado do signatário', icone: '📜',
+    pergunta: 'Um dos signatários bancários saiu do hotel. O que fazer com a procuração?',
+    opcoes: [
+      'Nada até a próxima auditoria.',
+      'Atualizar as procurações quando um signatário sai ou se ausenta por período longo.',
+      'Os outros signatários assinam por ele.',
+      'Só tirar o nome dele da matriz de alçadas.'
+    ],
+    correta: 1,
+    explicacao: 'Atualizar as procurações quando um signatário sai ou se ausenta por período longo. Todo pagamento a fornecedor exige duas aprovações, conforme a procuração vigente.',
+    fin: 'FIN-01'
+  },
+  {
+    cadeado: 'O cadeado dos três números', icone: '🔺',
+    pergunta: 'Fundos fixos no fechamento. Quais três números precisam ser iguais?',
+    opcoes: [
+      'Valor contábil dos fundos = soma das cartas de responsabilidade = contagem física.',
+      'Saldo do banco = PMS = orçamento.',
+      'Contagem física = valor do mês anterior = budget.',
+      'Soma das cartas = folha de pagamento = PMS.'
+    ],
+    correta: 0,
+    explicacao: 'Valor contábil dos fundos = soma das cartas = contagem física. Diferença não resolvida: repor o fundo e lançar como perda, com aprovação formal do GM ou Controller.',
+    fin: 'FIN-20'
+  },
+  {
+    cadeado: 'O cadeado da linha direta', icone: '☎️',
+    pergunta: 'Um colaborador desconfia de uma fraude. Qual canal ele pode usar?',
+    opcoes: [
+      'Só o chefe direto.',
+      'Nenhum: precisa de provas antes.',
+      'A Integrity Line (accor-integrity.com), seguindo a Diretriz de Reporte de Fraude. Em perigo imediato, acionar as autoridades.',
+      'Publicar no grupo da equipe.'
+    ],
+    correta: 2,
+    explicacao: 'Qualquer colaborador pode usar a Integrity Line: accor-integrity.com. Ela não é canal de emergência; em perigo imediato, acionar as autoridades.',
+    fin: 'Livro, p. 03'
   }
 ];

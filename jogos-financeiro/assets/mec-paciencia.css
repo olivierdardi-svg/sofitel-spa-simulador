@@ -1,0 +1,25 @@
+/* Mecânica "paciência": personagem chega, barra de tempo cai. Usada por Check-in do Caos e Balcão do Fornecedor. */
+.mesa{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:1.4em;max-width:1500px;margin:0 auto;align-items:start}
+.hospede{text-align:center;position:relative}
+.hospede .avatar{font-size:7em;line-height:1.1;display:inline-block;transition:transform .3s}
+.hospede img.avatar{width:5.5em;height:5.5em;object-fit:cover;border-radius:50%;border:4px solid var(--gold-d)}
+.hospede .nome{font-family:var(--serif);font-size:2em;font-weight:600;margin-top:.1em}
+.balao{position:relative;background:var(--ink);color:#1b1b1b;border-radius:18px;padding:.8em 1em;margin-top:.8em;font-size:1.1em;font-weight:500;text-align:left}
+.balao::before{content:"";position:absolute;top:-14px;left:50%;margin-left:-14px;border:14px solid transparent;border-top:0;border-bottom-color:var(--ink)}
+.contexto{margin-top:.8em;color:var(--ink2);font-size:.9em;text-align:left;border-left:3px solid var(--gold-d);padding-left:.7em}
+.paciencia{display:flex;align-items:center;gap:.7em;margin-bottom:1em}
+.paciencia .rosto{font-size:2.2em;width:1.3em;text-align:center}
+.paciencia .trilho{flex:1;height:1.1em;background:var(--surface2);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+.paciencia .barra{height:100%;width:100%;background:linear-gradient(90deg,var(--ok),#9bd36a);transition:width .25s linear,background .3s}
+.paciencia .seg{font-family:var(--serif);font-size:1.8em;font-weight:600;min-width:2.2em;text-align:right}
+.paciencia.alerta .barra{background:linear-gradient(90deg,var(--aviso),#f3c76b)}
+.paciencia.critico .barra{background:linear-gradient(90deg,var(--erro),#f08a7f)}
+.pergunta{font-family:var(--serif);font-size:1.75em;font-weight:500;line-height:1.15;margin-bottom:.7em}
+.contador{color:var(--ink3);font-size:.75em;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3em}
+.explodiu .avatar{animation:treme .5s 3}
+@keyframes treme{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-12px) rotate(-8deg)}75%{transform:translateX(12px) rotate(8deg)}}
+.fumaca{position:absolute;top:-.2em;right:18%;font-size:3em;animation:sobe 1s}
+.chegando{animation:chega .6s ease-out}
+@keyframes chega{from{opacity:0;transform:translateX(-80px)}to{opacity:1;transform:none}}
+.barra-acoes{display:flex;justify-content:flex-end;gap:.6em;margin-top:1em}
+@media (max-width:900px){.mesa{grid-template-columns:1fr}}

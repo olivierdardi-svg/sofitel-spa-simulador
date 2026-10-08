@@ -5,59 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Corrida contra o Aging</title>
 <link rel="stylesheet" href="assets/estilo.css">
-<style>
-.mesa{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:1.4em;max-width:1500px;margin:0 auto;align-items:start}
-.tabuleiro{display:grid;gap:.7em}
-.coluna{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.6em .8em;min-height:5em}
-.coluna h3{font-size:.75em;letter-spacing:.12em;text-transform:uppercase;display:flex;justify-content:space-between}
-.coluna.rec h3{color:var(--ok)}
-.coluna.venc h3{color:var(--erro)}
-.coluna .soma{font-family:var(--serif);font-size:1.6em;font-weight:600}
-.fichas{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.3em}
-.fichinha{font-size:.65em;background:var(--surface2);border-radius:6px;padding:.1em .5em;animation:sobe .4s}
-.coluna.rec .fichinha{border-left:3px solid var(--ok)}
-.coluna.venc .fichinha{border-left:3px solid var(--erro)}
-.indic{background:#0c0e13;border:1px solid var(--border);border-radius:var(--r);padding:.6em .8em;text-align:center}
-.indic b{font-family:var(--serif);font-size:2.2em;display:block;line-height:1}
-.indic span{font-size:.7em;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase}
-.fatura{background:#f3eee2;color:#1d1a14;border-radius:var(--r);padding:1em 1.2em;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:chega .5s ease-out}
-@keyframes chega{from{opacity:0;transform:translateY(-30px) rotate(-2deg)}to{opacity:1;transform:none}}
-.fatura .topo-f{display:flex;justify-content:space-between;align-items:flex-start;gap:1em;border-bottom:2px dashed #b9ad92;padding-bottom:.5em;margin-bottom:.6em}
-.fatura .cli{font-family:var(--serif);font-size:1.6em;font-weight:600;line-height:1.05}
-.fatura .val{font-family:var(--serif);font-size:1.8em;font-weight:600;color:#7a5c22;white-space:nowrap}
-.fatura .pergunta{font-size:1.25em;font-weight:500}
-.dias{display:flex;align-items:center;gap:.8em;margin:.8em 0}
-.dias .trilho{flex:1;height:1em;border-radius:999px;background:#ddd3bd;overflow:hidden;position:relative}
-.dias .barra{height:100%;width:0;background:linear-gradient(90deg,#3fb27f,#e8a93a 66%,#e0564f);transition:width .25s linear}
-.dias .marca{position:absolute;top:-.2em;bottom:-.2em;width:2px;background:#1d1a14;opacity:.4}
-.dias .num{font-family:'Courier New',monospace;font-weight:700;font-size:1.4em;min-width:5.5em;text-align:right}
-.carimbo{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%) rotate(-14deg);font-family:var(--serif);font-weight:700;font-size:3.2em;letter-spacing:.06em;border:6px solid;border-radius:12px;padding:0 .4em;opacity:.85;pointer-events:none;animation:carimba .35s ease-out}
-.carimbo.pago{color:#2d8a5f;border-color:#2d8a5f}
-.carimbo.vencido{color:#c0392b;border-color:#c0392b}
-@keyframes carimba{from{transform:translate(-50%,-50%) rotate(-14deg) scale(2.2);opacity:0}to{transform:translate(-50%,-50%) rotate(-14deg) scale(1);opacity:.85}}
-.fatura .opcoes .opcao{background:#fff;color:#1d1a14;border-color:#cfc6b0}
-.fatura .opcoes .opcao .tecla{background:#1d1a14}
-.fatura .opcoes .opcao.certa{background:#d5f0e2;border-color:#2d8a5f}
-.fatura .opcoes .opcao.errada{background:#f7d4d0;border-color:#c0392b}
-.seq{display:grid;gap:.5em}
-.seq .pool,.seq .montada{display:grid;gap:.4em}
-.passo{display:flex;gap:.6em;align-items:center;text-align:left;background:#fff;color:#1d1a14;border:2px solid #cfc6b0;border-radius:10px;padding:.45em .7em;font-size:.95em}
-.passo:hover{border-color:#7a5c22}
-.passo .n{flex:none;width:1.7em;height:1.7em;border-radius:50%;background:#1d1a14;color:#f3eee2;display:grid;place-items:center;font-weight:700;font-size:.85em}
-.passo.usado{opacity:.3;pointer-events:none}
-.passo.certo{border-color:#2d8a5f;background:#d5f0e2}
-.passo.errado{border-color:#c0392b;background:#f7d4d0}
-.vazio{border:2px dashed #b9ad92;border-radius:10px;padding:.45em .7em;color:#8a8170;font-size:.9em}
-.rot{font-size:.7em;letter-spacing:.12em;text-transform:uppercase;color:#7a5c22;margin-top:.3em}
-.barra-acoes{display:flex;justify-content:flex-end;gap:.6em;margin-top:1em;flex-wrap:wrap}
-.vez{color:var(--ink3);font-size:.8em;margin-bottom:.4em}
-@media (max-width:900px){.mesa{grid-template-columns:1fr}}
-</style>
+<link rel="stylesheet" href="assets/mec-tabuleiro.css">
 </head>
 <body>
 <div class="jogo">
   <div class="topo">
-    <h1><small>Jogo 5 · Crédito e Cobrança · FIN-30 a FIN-32</small>Corrida contra o Aging</h1>
+    <h1><small>Outros setores · Crédito e Cobrança · FIN-30 a FIN-32</small>Corrida contra o Aging</h1>
     <div class="acoes">
       <button class="btn-ico" id="btnAjuda">? Atalhos</button>
       <button class="btn-ico" id="btnSom">🔊 Som</button>
@@ -96,7 +49,7 @@
         <div class="fatura" id="fatura"></div>
         <div id="resposta"></div>
         <div class="barra-acoes">
-          <button class="btn sec" id="btnPausa">⏸ Parar o calendário (P)</button>
+          <button class="btn sec" id="btnPausa">⏸ Parar o relógio (P)</button>
           <button class="btn oculto" id="btnProx">Próxima fatura ▶ (Espaço)</button>
         </div>
       </div>
@@ -111,181 +64,16 @@
 <script src="assets/motor.js"></script>
 <script src="dados/aging.js"></script>
 <script>
-(function () {
-  var D = window.DADOS_AGING;
-  var $ = function (id) { return document.getElementById(id); };
-  var fila = [], idx = 0, total = 45, resta = 45, timer = null, pausado = false, feito = false;
-  var opc = [], pool = [], montada = [], recebido = 0, vencido = 0, revisao = [];
-  var brl = function (v) { return 'R$ ' + v.toLocaleString('pt-BR'); };
-
-  var sel = $('cfgQtd');
-  for (var n = 3; n <= D.length; n++) sel.innerHTML += '<option' + (n === Math.min(10, D.length) ? ' selected' : '') + '>' + n + '</option>';
-
-  $('btnComecar').onclick = function () {
-    total = +$('cfgSeg').value;
-    fila = ($('cfgAleat').checked ? Motor.embaralhar(D) : D.slice()).slice(0, +sel.value);
-    $('telaAbertura').classList.add('oculto');
-    $('telaJogo').classList.remove('oculto');
-    idx = 0; atualizarTabuleiro(); mostrar();
-  };
-
-  function atualizarTabuleiro() {
-    $('qAberto').textContent = (fila.length - idx - (feito ? 1 : 0)) + ' faturas';
-    $('sRec').textContent = brl(recebido);
-    $('sVenc').textContent = brl(vencido);
-    var t = recebido + vencido;
-    $('pct').textContent = (t ? Math.round(100 * vencido / t) : 0) + '%';
-    $('pct').style.color = vencido > 0 ? 'var(--erro)' : 'var(--ok)';
-  }
-
-  function mostrar() {
-    var c = fila[idx];
-    feito = false; pausado = false; resta = total; montada = [];
-    $('vezTxt').innerHTML = 'Fatura ' + (idx + 1) + ' de ' + fila.length + ' · vez do <b style="color:' + Motor.timeAtivo().cor + '">' + Motor.esc(Motor.timeAtivo().nome) + '</b>';
-    var html = '<div class="topo-f"><div><div class="rot">' + (c.tipo === 'sequencia' ? 'Monte a sequência' : 'Escolha a ação') + '</div><div class="cli">' + Motor.esc(c.cliente) + '</div></div>' +
-      (c.valor ? '<div class="val">' + brl(c.valor) + '</div>' : '') + '</div>' +
-      '<div class="pergunta">' + Motor.esc(c.pergunta) + '</div>' +
-      '<div class="dias"><span>📅</span><div class="trilho"><div class="barra" id="barra"></div><div class="marca" style="left:66.6%"></div></div><span class="num" id="dias">dia 0</span></div>';
-    if (c.tipo === 'sequencia') {
-      pool = Motor.embaralhar(c.passos.map(function (t, i) { return { txt: t, pos: i }; }));
-      html += '<div class="seq"><div class="rot">Passos (clique na ordem que o time ditar)</div><div class="pool" id="pool"></div>' +
-        '<div class="rot">Ordem do time</div><div class="montada" id="montada"></div>' +
-        '<div style="display:flex;gap:.5em;justify-content:flex-end"><button class="btn sec" id="btnLimpar" style="color:#1d1a14;border-color:#b9ad92">↺ Limpar</button><button class="btn" id="btnConferir">Conferir ordem ✓</button></div></div>';
-    } else {
-      opc = Motor.prepararOpcoes(c);
-      html += '<div class="opcoes" id="opcoes">' + opc.map(function (o, i) {
-        return '<button class="opcao" data-i="' + i + '"><span class="tecla">' + (i + 1) + '</span><span>' + Motor.esc(o.txt) + '</span></button>';
-      }).join('') + '</div>';
-    }
-    var f = $('fatura');
-    f.style.animation = 'none'; void f.offsetWidth; f.style.animation = '';
-    f.innerHTML = html;
-    if (c.tipo === 'sequencia') {
-      desenharSeq();
-      $('btnLimpar').onclick = function () { if (!feito) { montada = []; desenharSeq(); } };
-      $('btnConferir').onclick = conferirSeq;
-    }
-    $('resposta').innerHTML = '';
-    $('btnProx').classList.add('oculto');
-    $('btnPausa').classList.remove('oculto');
-    $('btnPausa').textContent = '⏸ Parar o calendário (P)';
-    atualizarTabuleiro();
-    clearInterval(timer);
-    timer = setInterval(passo, 250);
-    Motor.som.clique();
-  }
-
-  function desenharSeq() {
-    $('pool').innerHTML = pool.map(function (p, i) {
-      var usado = montada.indexOf(i) >= 0;
-      return '<button class="passo' + (usado ? ' usado' : '') + '" data-p="' + i + '"><span class="n">•</span><span>' + Motor.esc(p.txt) + '</span></button>';
-    }).join('');
-    var h = montada.map(function (pi, k) { return '<div class="passo" data-m="' + k + '"><span class="n">' + (k + 1) + '</span><span>' + Motor.esc(pool[pi].txt) + '</span></div>'; }).join('');
-    for (var k = montada.length; k < pool.length; k++) h += '<div class="vazio">' + (k + 1) + '. …</div>';
-    $('montada').innerHTML = h;
-  }
-
-  function passo() {
-    if (pausado || feito) return;
-    var antes = Math.ceil(resta);
-    resta = Math.max(0, resta - .25);
-    if (Math.ceil(resta) !== antes && resta <= 5 && resta > 0) Motor.som.tique();
-    var p = 1 - resta / total;
-    $('barra').style.width = (p * 100) + '%';
-    $('dias').textContent = 'dia ' + Math.round(p * 45 + (p >= 1 ? 1 : 0)) + (p >= 1 ? '+' : '');
-    if (resta <= 0) concluir(false, true);
-  }
-
-  function responder(i) {
-    if (feito || fila[idx].tipo === 'sequencia' || i >= opc.length) return;
-    document.querySelectorAll('#opcoes .opcao').forEach(function (b, k) {
-      b.disabled = true;
-      b.classList.add(opc[k].certa ? 'certa' : (k === i ? 'errada' : 'apagada'));
-    });
-    concluir(opc[i].certa, false);
-  }
-
-  function conferirSeq() {
-    if (feito) return;
-    if (montada.length < pool.length) { Motor.som.erro(); return; }
-    var ok = montada.every(function (pi, k) { return pool[pi].pos === k; });
-    document.querySelectorAll('#montada .passo').forEach(function (el, k) {
-      el.classList.add(pool[montada[k]].pos === k ? 'certo' : 'errado');
-    });
-    concluir(ok, false);
-  }
-
-  function concluir(certo, tempo) {
-    if (feito) return;
-    feito = true;
-    clearInterval(timer);
-    var c = fila[idx];
-    var f = $('fatura');
-    f.insertAdjacentHTML('beforeend', '<div class="carimbo ' + (certo ? 'pago' : 'vencido') + '">' + (certo ? 'RECEBIDO' : '+45 DIAS') + '</div>');
-    var ficha = '<span class="fichinha">' + Motor.esc(c.cliente.replace(/\s*\(.*\)$/, '')) + (c.valor ? ' · ' + brl(c.valor) : '') + '</span>';
-    if (certo) { recebido += c.valor; $('fRec').insertAdjacentHTML('beforeend', ficha); Motor.pontuar(Motor.ativo, 100); Motor.som.acerto(); }
-    else { vencido += c.valor; $('fVenc').insertAdjacentHTML('beforeend', ficha); Motor.som[tempo ? 'buzina' : 'erro'](); }
-    atualizarTabuleiro();
-    var certaTxt = c.tipo === 'sequencia' ? c.passos.map(function (p, k) { return (k + 1) + '. ' + p; }).join(' → ') :
-      opc.filter(function (o) { return o.certa; })[0].txt;
-    var titulo = certo ? '✔ Fatura recebida! +100 pontos' : (tempo ? '📅 Passaram 45 dias e ninguém decidiu!' : '✘ A fatura escorregou para +45 dias');
-    $('resposta').innerHTML = '<div class="resposta' + (certo ? '' : ' mal') + '"><h3>' + titulo + '</h3>' +
-      (certo ? '' : '<p><b>Resposta certa:</b> ' + Motor.esc(certaTxt) + '</p>') +
-      '<p>' + Motor.esc(c.explicacao) + '</p><span class="fin">' + Motor.esc(c.fin) + '</span></div>';
-    if (tempo && c.tipo !== 'sequencia') {
-      document.querySelectorAll('#opcoes .opcao').forEach(function (b, k) { b.disabled = true; b.classList.add(opc[k].certa ? 'certa' : 'apagada'); });
-    }
-    revisao.push({ situacao: c.cliente + ': ' + c.pergunta, resposta: certaTxt, fin: c.fin });
-    $('btnPausa').classList.add('oculto');
-    $('btnProx').textContent = idx + 1 < fila.length ? 'Próxima fatura ▶ (Espaço)' : 'Fechar o mês e ver o placar ▶';
-    $('btnProx').classList.remove('oculto');
-    Motor.mostrarNaTela($('btnProx'));
-  }
-
-  function proximo() {
-    if (!feito) return;
-    idx++;
-    if (idx >= fila.length) {
-      var t = recebido + vencido;
-      $('telaJogo').classList.add('oculto');
-      $('telaFim').classList.remove('oculto');
-      Motor.renderRevisao($('telaFim'), 'Mês fechado! Recebido ' + brl(recebido) + ' · ' + brl(vencido) + ' escorregou para +45 dias (' + (t ? Math.round(100 * vencido / t) : 0) + '%)', revisao);
-      return;
-    }
-    Motor.proximoTime();
-    mostrar();
-  }
-
-  function pausar() {
-    if (feito) return;
-    pausado = !pausado;
-    $('btnPausa').textContent = pausado ? '▶ Continuar o calendário (P)' : '⏸ Parar o calendário (P)';
-  }
-
-  $('fatura').addEventListener('click', function (e) {
-    var b = e.target.closest('.opcao'); if (b) { responder(+b.getAttribute('data-i')); return; }
-    var p = e.target.closest('.passo[data-p]');
-    if (p && !feito) {
-      var i = +p.getAttribute('data-p');
-      if (montada.indexOf(i) < 0) { montada.push(i); Motor.som.clique(); desenharSeq(); }
-      return;
-    }
-    var m = e.target.closest('.passo[data-m]');
-    if (m && !feito) { montada.splice(+m.getAttribute('data-m'), 1); desenharSeq(); }
-  });
-  $('btnProx').onclick = proximo;
-  $('btnPausa').onclick = pausar;
-
-  Motor.iniciarPagina(function (e, k) {
-    if ($('telaJogo').classList.contains('oculto')) {
-      if ((k === 'enter' || k === ' ') && !$('telaAbertura').classList.contains('oculto')) { e.preventDefault(); $('btnComecar').click(); }
-      return;
-    }
-    if (k >= '1' && k <= '4') responder(+k - 1);
-    else if (k === ' ' || k === 'enter') { e.preventDefault(); proximo(); }
-    else if (k === 'p') pausar();
-  }, [['1–4', 'Escolher a resposta'], ['Clique nos passos', 'Montar a sequência (clique num passo montado para tirar)'], ['P', 'Parar o calendário'], ['Espaço', 'Próxima fatura']]);
-})();
+window.CFG_JOGO = {
+  dados: window.DADOS_AGING,
+  item: 'Fatura', itemPlural: 'faturas', moeda: true,
+  relogio: function (p) { return 'dia ' + Math.round(p * 45 + (p >= 1 ? 1 : 0)) + (p >= 1 ? '+' : ''); },
+  carimboOk: 'RECEBIDO', carimboMal: '+45 DIAS',
+  acerto: '✔ Fatura recebida!', erro: '✘ A fatura escorregou para +45 dias', tempo: '📅 Passaram 45 dias e ninguém decidiu!',
+  proximo: 'Próxima fatura', ultimo: 'Fechar o mês e ver o placar',
+  tituloFim: function (ok, mal, pct) { return 'Mês fechado! Recebido ' + ok + ' · ' + mal + ' escorregou para +45 dias (' + pct + '%)'; }
+};
 </script>
+<script src="assets/mec-tabuleiro.js"></script>
 </body>
 </html>
