@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doca de Recebimento</title>
+<link rel="stylesheet" href="assets/estilo.css">
+<style>
+.doca{max-width:1500px;margin:0 auto}
+.esteira-box{position:relative;height:9em;margin-bottom:1em}
+.esteira{position:absolute;left:0;right:0;bottom:1em;height:1.6em;border-radius:999px;background:repeating-linear-gradient(90deg,#2c3142 0 30px,#3a4054 30px 60px);border:3px solid #4b5268;animation:rola 1s linear infinite}
+.esteira.parada{animation-play-state:paused}
+@keyframes rola{from{background-position:0 0}to{background-position:60px 0}}
+.rodas{position:absolute;left:0;right:0;bottom:-.2em;display:flex;justify-content:space-between;padding:0 1em;color:#4b5268;font-size:1.2em}
+.fim-esteira{position:absolute;right:-.2em;bottom:.2em;font-size:2.4em}
+.caixa{position:absolute;bottom:2.4em;left:0;display:flex;flex-direction:column;align-items:center;transition:left .25s linear}
+.caixa .pacote{background:#b88a4a;border:3px solid #7a5a2c;border-radius:8px;padding:.25em .6em;font-size:2.6em;line-height:1.1;box-shadow:0 6px 10px rgba(0,0,0,.4)}
+.caixa .pacote img{width:2.2em;height:2.2em;object-fit:cover;border-radius:6px;display:block}
+.caixa .etq{font-size:.7em;background:#f3eee2;color:#1d1a14;border-radius:4px;padding:0 .4em;margin-top:.2em;white-space:nowrap}
+.caixa.caiu{transition:transform .8s ease-in,opacity .8s;transform:translateY(120px) rotate(70deg);opacity:0}
+.caixa.ok .pacote{border-color:var(--ok);box-shadow:0 0 22px var(--ok)}
+.caixa.mal .pacote{border-color:var(--erro);box-shadow:0 0 22px var(--erro)}
+.ficha{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8em;margin:.6em 0}
+.ficha .doc{background:#f3eee2;color:#1d1a14;border-radius:10px;padding:.6em .8em}
+.ficha .doc h4{font-size:.7em;letter-spacing:.1em;text-transform:uppercase;color:#7a5c22}
+.ficha .doc p{font-size:1.15em;font-weight:700}
+.prod{display:flex;align-items:baseline;gap:.6em;flex-wrap:wrap}
+.prod h2{font-family:var(--serif);font-size:2.2em;font-weight:500;line-height:1}
+.prod span{color:var(--ink3);font-size:.85em}
+.detalhe{background:#0c0e13;border-left:4px solid var(--gold);border-radius:8px;padding:.5em .8em;color:var(--ink2);font-style:italic}
+.acoes-doca{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.7em;margin-top:1em}
+.acao{border:3px solid transparent;border-radius:14px;padding:.7em .5em;font-weight:700;font-size:1.05em;display:flex;flex-direction:column;align-items:center;gap:.15em;transition:transform .1s}
+.acao:hover{transform:translateY(-3px)}
+.acao .e{font-size:1.8em}
+.acao kbd{font-size:.7em;opacity:.7;font-family:var(--sans)}
+.acao.aceitar{background:#1d4a37}
+.acao.recusar{background:#5a1f1c}
+.acao.divergencia{background:#5c4515}
+.acao.alerta{background:#283f61}
+.acao.certa{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.4)}
+.acao.errada{opacity:.45;text-decoration:line-through}
+.acao:disabled{cursor:default;transform:none}
+.topinho{display:flex;justify-content:space-between;align-items:center;color:var(--ink3);font-size:.8em;letter-spacing:.1em;text-transform:uppercase}
+.barra-acoes{display:flex;justify-content:flex-end;gap:.6em;margin-top:1em}
+.legenda{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5em}
+.legenda div{background:var(--surface);border-radius:10px;padding:.5em .8em}
+@media (max-width:900px){.ficha,.acoes-doca,.legenda{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="jogo">
+  <div class="topo">
+    <h1><small>Jogo 4 · Compras e Almoxarifado · FIN-40 · FIN-41 · FIN-42</small>Doca de Recebimento</h1>
+    <div class="acoes">
+      <button class="btn-ico" id="btnAjuda">? Atalhos</button>
+      <button class="btn-ico" id="btnSom">🔊 Som</button>
+      <button class="btn-ico" id="btnTela">⛶ Tela cheia</button>
+      <a class="btn-ico" href="index.html" style="text-decoration:none">☰ Menu</a>
+    </div>
+  </div>
+
+  <main class="palco">
+    <section class="abertura" id="telaAbertura">
+      <div class="titulo">Doca de <em>Recebimento</em></div>
+      <p class="muted">Segunda-feira, 7h. Os caminhões chegaram todos juntos. Cada entrega anda pela esteira e o time tem que decidir antes que a caixa caia do outro lado. Pedido = recebimento = nota fiscal.</p>
+      <div class="legenda">
+        <div>✅ <b>Aceitar</b>: tudo confere com o pedido e a nota.</div>
+        <div>⛔ <b>Recusar</b>: a mercadoria não entra.</div>
+        <div>📝 <b>Anotar divergência</b>: recebe, registra o real na nota e pede nota de crédito.</div>
+        <div>🚨 <b>Alerta de controle</b>: o problema é de processo (segregação, dado bancário, compra fora da regra).</div>
+      </div>
+      <ol>
+        <li>Acertou: 100 pontos + bônus de rapidez (até +50).</li>
+        <li>Errou ou a caixa caiu da esteira: 0 pontos e a resposta aparece. O apresentador pode dar roubo (+50) no placar.</li>
+      </ol>
+      <div class="config">
+        <label>Entregas: <select id="cfgQtd"></select></label>
+        <label>Velocidade da esteira: <select id="cfgSeg"><option value="25">Rápida (25 s)</option><option value="40" selected>Normal (40 s)</option><option value="60">Calma (60 s)</option></select></label>
+        <label><input type="checkbox" id="cfgAleat" checked> Ordem aleatória</label>
+      </div>
+      <div><button class="btn" id="btnComecar">Ligar a esteira ▶</button></div>
+    </section>
+
+    <section class="doca oculto" id="telaJogo">
+      <div class="topinho"><span id="contador"></span><span id="vezTxt"></span></div>
+      <div class="esteira-box">
+        <div class="caixa" id="caixa"></div>
+        <div class="esteira" id="esteira"></div>
+        <div class="rodas"><span>⚙️</span><span>⚙️</span><span>⚙️</span><span>⚙️</span><span>⚙️</span><span>⚙️</span></div>
+        <div class="fim-esteira">🗑️</div>
+      </div>
+      <div class="prod"><h2 id="produto"></h2><span id="fornecedor"></span></div>
+      <div class="ficha">
+        <div class="doc"><h4>📄 Pedido aprovado</h4><p id="pedido"></p></div>
+        <div class="doc"><h4>🧾 Nota fiscal</h4><p id="nota"></p></div>
+        <div class="doc"><h4>⚖️ O que chegou</h4><p id="chegou"></p></div>
+      </div>
+      <div class="detalhe" id="detalhe"></div>
+      <div class="acoes-doca" id="acoesDoca">
+        <button class="acao aceitar" data-a="aceitar"><span class="e">✅</span>Aceitar<kbd>tecla 1</kbd></button>
+        <button class="acao recusar" data-a="recusar"><span class="e">⛔</span>Recusar<kbd>tecla 2</kbd></button>
+        <button class="acao divergencia" data-a="divergencia"><span class="e">📝</span>Anotar divergência<kbd>tecla 3</kbd></button>
+        <button class="acao alerta" data-a="alerta"><span class="e">🚨</span>Alerta de controle<kbd>tecla 4</kbd></button>
+      </div>
+      <div id="resposta"></div>
+      <div class="barra-acoes">
+        <button class="btn sec" id="btnPausa">⏸ Parar esteira (P)</button>
+        <button class="btn oculto" id="btnProx">Próxima entrega ▶ (Espaço)</button>
+      </div>
+    </section>
+
+    <section id="telaFim" class="oculto"></section>
+  </main>
+
+  <div class="placar" id="placar"></div>
+</div>
+
+<script src="assets/motor.js"></script>
+<script src="dados/doca.js"></script>
+<script>
+(function () {
+  var D = window.DADOS_DOCA;
+  var $ = function (id) { return document.getElementById(id); };
+  var ROTULO = { aceitar: '✅ Aceitar', recusar: '⛔ Recusar', divergencia: '📝 Anotar divergência', alerta: '🚨 Alerta de controle' };
+  var ORDEM = ['aceitar', 'recusar', 'divergencia', 'alerta'];
+  var fila = [], idx = 0, total = 40, resta = 40, timer = null, pausado = false, decidido = false, revisao = [];
+
+  var sel = $('cfgQtd');
+  for (var n = 3; n <= D.length; n++) sel.innerHTML += '<option' + (n === Math.min(10, D.length) ? ' selected' : '') + '>' + n + '</option>';
+
+  $('btnComecar').onclick = function () {
+    total = +$('cfgSeg').value;
+    fila = ($('cfgAleat').checked ? Motor.embaralhar(D) : D.slice()).slice(0, +sel.value);
+    $('telaAbertura').classList.add('oculto');
+    $('telaJogo').classList.remove('oculto');
+    idx = 0; mostrar();
+  };
+
+  function mostrar() {
+    var e = fila[idx];
+    decidido = false; pausado = false; resta = total;
+    $('contador').textContent = 'Entrega ' + (idx + 1) + ' de ' + fila.length;
+    $('vezTxt').innerHTML = 'Vez do <b style="color:' + Motor.timeAtivo().cor + '">' + Motor.esc(Motor.timeAtivo().nome) + '</b>';
+    $('produto').textContent = e.icone + ' ' + e.produto;
+    $('fornecedor').textContent = e.fornecedor;
+    $('pedido').textContent = e.pedido;
+    $('nota').textContent = e.nota;
+    $('chegou').textContent = e.chegou;
+    $('detalhe').textContent = e.detalhe;
+    var cx = $('caixa');
+    cx.className = 'caixa';
+    cx.innerHTML = '<div class="pacote">' + Motor.imagemOuEmoji(e.midia, e.icone, '') + '</div><div class="etq">' + Motor.esc(e.produto) + '</div>';
+    cx.style.transition = 'none'; cx.style.left = '0%';
+    void cx.offsetWidth; cx.style.transition = '';
+    document.querySelectorAll('.acao').forEach(function (b) { b.disabled = false; b.classList.remove('certa', 'errada'); });
+    $('resposta').innerHTML = '';
+    $('btnProx').classList.add('oculto');
+    $('btnPausa').classList.remove('oculto');
+    $('btnPausa').textContent = '⏸ Parar esteira (P)';
+    $('esteira').classList.remove('parada');
+    clearInterval(timer);
+    timer = setInterval(passo, 250);
+    Motor.som.clique();
+  }
+
+  function passo() {
+    if (pausado || decidido) return;
+    var antes = Math.ceil(resta);
+    resta = Math.max(0, resta - .25);
+    if (Math.ceil(resta) !== antes && resta <= 5 && resta > 0) Motor.som.tique();
+    $('caixa').style.left = (88 * (1 - resta / total)) + '%';
+    if (resta <= 0) decidir(null);
+  }
+
+  function decidir(acao) {
+    if (decidido) return;
+    decidido = true;
+    clearInterval(timer);
+    $('esteira').classList.add('parada');
+    var e = fila[idx];
+    var certo = acao === e.correta;
+    document.querySelectorAll('.acao').forEach(function (b) {
+      b.disabled = true;
+      var a = b.getAttribute('data-a');
+      if (a === e.correta) b.classList.add('certa');
+      else if (a === acao) b.classList.add('errada');
+    });
+    var titulo;
+    if (certo) {
+      var bonus = Math.round(50 * resta / total);
+      Motor.pontuar(Motor.ativo, 100 + bonus);
+      Motor.som.acerto();
+      $('caixa').classList.add('ok');
+      titulo = '✔ Certo! +' + (100 + bonus) + ' pontos';
+    } else if (acao == null) {
+      Motor.som.buzina();
+      $('caixa').classList.add('caiu');
+      titulo = '📦💥 A caixa caiu da esteira! A resposta era: ' + ROTULO[e.correta];
+    } else {
+      Motor.som.erro();
+      $('caixa').classList.add('mal');
+      titulo = '✘ Não era isso. A resposta era: ' + ROTULO[e.correta];
+    }
+    $('resposta').innerHTML = '<div class="resposta' + (certo ? '' : ' mal') + '"><h3>' + Motor.esc(titulo) + '</h3><p>' + Motor.esc(e.explicacao) + '</p><span class="fin">' + Motor.esc(e.fin) + '</span></div>';
+    revisao.push({ situacao: e.produto + ': ' + e.detalhe + ' (pedido ' + e.pedido + ' · nota ' + e.nota + ' · chegou ' + e.chegou + ')', resposta: ROTULO[e.correta] + '. ' + e.explicacao, fin: e.fin });
+    $('btnPausa').classList.add('oculto');
+    $('btnProx').textContent = idx + 1 < fila.length ? 'Próxima entrega ▶ (Espaço)' : 'Desligar a esteira e ver o placar ▶';
+    $('btnProx').classList.remove('oculto');
+    Motor.mostrarNaTela($('btnProx'));
+  }
+
+  function proximo() {
+    if (!decidido) return;
+    idx++;
+    if (idx >= fila.length) {
+      $('telaJogo').classList.add('oculto');
+      $('telaFim').classList.remove('oculto');
+      Motor.renderRevisao($('telaFim'), 'Fim do turno na doca! Resultado', revisao);
+      return;
+    }
+    Motor.proximoTime();
+    mostrar();
+  }
+
+  function pausar() {
+    if (decidido) return;
+    pausado = !pausado;
+    $('esteira').classList.toggle('parada', pausado);
+    $('btnPausa').textContent = pausado ? '▶ Ligar esteira (P)' : '⏸ Parar esteira (P)';
+  }
+
+  $('acoesDoca').addEventListener('click', function (ev) {
+    var b = ev.target.closest('.acao'); if (b) decidir(b.getAttribute('data-a'));
+  });
+  $('btnProx').onclick = proximo;
+  $('btnPausa').onclick = pausar;
+
+  Motor.iniciarPagina(function (ev, k) {
+    if ($('telaJogo').classList.contains('oculto')) {
+      if ((k === 'enter' || k === ' ') && !$('telaAbertura').classList.contains('oculto')) { ev.preventDefault(); $('btnComecar').click(); }
+      return;
+    }
+    if (k >= '1' && k <= '4') decidir(ORDEM[+k - 1]);
+    else if (k === ' ' || k === 'enter') { ev.preventDefault(); proximo(); }
+    else if (k === 'p') pausar();
+  }, [['1', 'Aceitar'], ['2', 'Recusar'], ['3', 'Anotar divergência'], ['4', 'Alerta de controle'], ['P', 'Parar a esteira'], ['Espaço', 'Próxima entrega']]);
+})();
+</script>
+</body>
+</html>

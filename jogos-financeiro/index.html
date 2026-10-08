@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogos do Financeiro</title>
+<link rel="stylesheet" href="assets/estilo.css">
+<style>
+.hub{max-width:1280px;margin:0 auto;padding:1.4em 1.6em 3em}
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:1em;flex-wrap:wrap;margin-bottom:1.2em}
+.hero h1{font-family:var(--serif);font-weight:500;font-size:3.2em;line-height:1}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero p{color:var(--ink2);max-width:40em}
+.kicker{font-size:.7em;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:1em;margin-top:1em}
+.jogo-card{display:flex;flex-direction:column;gap:.5em;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1em 1.2em;transition:transform .15s,border-color .15s}
+.jogo-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+.jogo-card .num{font-size:.7em;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.jogo-card h2{font-family:var(--serif);font-weight:500;font-size:1.9em;line-height:1.05}
+.jogo-card .ico{font-size:2.4em;line-height:1}
+.jogo-card p{color:var(--ink2);font-size:.85em}
+.tags{display:flex;gap:.4em;flex-wrap:wrap;margin-top:auto}
+.tag{font-size:.7em;background:var(--bg);border:1px solid var(--border);border-radius:999px;padding:.1em .7em;color:var(--ink2)}
+.times-cfg{display:grid;gap:.8em}
+.times-cfg .linha{display:flex;gap:.6em;flex-wrap:wrap;align-items:center}
+.times-cfg input{font:inherit;background:var(--surface2);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:.3em .6em;width:12em;max-width:100%}
+.times-cfg .cor{width:1em;height:1em;border-radius:50%;display:inline-block}
+.dica{font-size:.8em;color:var(--ink3);margin-top:.8em}
+</style>
+</head>
+<body>
+<div class="jogo">
+  <div class="topo">
+    <h1><small>Sofitel Rio de Janeiro Ipanema · Finanças</small>Jogos do Financeiro</h1>
+    <div class="acoes">
+      <button class="btn-ico" id="btnSom">🔊 Som</button>
+      <button class="btn-ico" id="btnTela">⛶ Tela cheia</button>
+    </div>
+  </div>
+
+  <main class="hub">
+    <div class="hero">
+      <div>
+        <div class="kicker">Treinamento de pré-abertura · Base: Livro do Financeiro (FOCUS 2025)</div>
+        <h1>Controle não documentado é <em>controle não feito.</em></h1>
+      </div>
+      <p>Cinco jogos, um por setor, cada um com uma mecânica diferente. O placar é um só e acumula de um jogo para o outro. Toda resposta mostra a explicação e o procedimento de origem.</p>
+    </div>
+
+    <section class="cartao">
+      <div class="kicker" style="margin-bottom:.6em">1 · Monte os times</div>
+      <div class="times-cfg">
+        <div class="linha">
+          <label class="muted">Quantos times?
+            <select id="qtdTimes" style="font:inherit;background:var(--surface2);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:.2em .5em">
+              <option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option>
+            </select>
+          </label>
+        </div>
+        <div class="linha" id="nomesTimes"></div>
+        <div class="linha">
+          <button class="btn" id="btnSalvarTimes">Salvar times</button>
+          <button class="btn sec" id="btnZerar">Zerar placar</button>
+        </div>
+      </div>
+      <p class="dica">O placar fica guardado neste navegador. Use sempre o mesmo computador durante a reunião.</p>
+    </section>
+
+    <div class="kicker" style="margin-top:1.6em">2 · Escolha o jogo</div>
+    <div class="grade">
+      <a class="jogo-card" href="checkin-do-caos.html">
+        <span class="ico">🛎️</span><span class="num">Jogo 1 · Recepção / Front Office</span>
+        <h2>Check-in do Caos</h2>
+        <p>Hóspedes caricatos chegam um a um. O time decide a ação certa antes que a barra de paciência acabe. Quanto mais rápido, mais pontos.</p>
+        <div class="tags"><span class="tag">FIN-10 a FIN-16</span><span class="tag">Contra o relógio</span></div>
+      </a>
+      <a class="jogo-card" href="fuga-do-cofre.html">
+        <span class="ico">🔐</span><span class="num">Jogo 2 · Caixa e Tesouraria</span>
+        <h2>Fuga do Cofre</h2>
+        <p>Escape room: cada cadeado só abre com a resposta certa e revela um dígito do segredo. Errou? Alarme, e o relógio da sala perde 30 segundos.</p>
+        <div class="tags"><span class="tag">FIN-20 a FIN-25</span><span class="tag">Escape room</span></div>
+      </a>
+      <a class="jogo-card" href="garrafa-sumida.html">
+        <span class="ico">🍾</span><span class="num">Jogo 3 · A&amp;B</span>
+        <h2>O Mistério da Garrafa Sumida</h2>
+        <p>Jogo de detetive. O time abre envelopes de pistas (inventário, requisição, PDV, perdas) e aponta a linha onde a conta não fecha. Cada pista extra custa pontos.</p>
+        <div class="tags"><span class="tag">FIN-10 · FIN-42 · FIN-43</span><span class="tag">Investigação</span></div>
+      </a>
+      <a class="jogo-card" href="doca-de-recebimento.html">
+        <span class="ico">🚚</span><span class="num">Jogo 4 · Compras e Almoxarifado</span>
+        <h2>Doca de Recebimento</h2>
+        <p>Entregas chegam pela esteira. Aceitar, recusar, anotar divergência ou soltar o alerta de controle, antes que a caixa caia da esteira.</p>
+        <div class="tags"><span class="tag">FIN-40 · FIN-41 · FIN-42</span><span class="tag">Esteira</span></div>
+      </a>
+      <a class="jogo-card" href="corrida-do-aging.html">
+        <span class="ico">📈</span><span class="num">Jogo 5 · Crédito e Cobrança</span>
+        <h2>Corrida contra o Aging</h2>
+        <p>Cada carta é uma fatura. Acertou, o hotel recebe. Errou, a fatura escorrega para "+45 dias". Tem rodada de montar a sequência na ordem certa.</p>
+        <div class="tags"><span class="tag">FIN-30 a FIN-32</span><span class="tag">Tabuleiro + sequência</span></div>
+      </a>
+    </div>
+    <p class="dica" style="margin-top:1.4em">Atalhos em qualquer jogo: <b>F</b> tela cheia · <b>M</b> som · <b>N</b> próximo time · <b>H</b> volta ao menu · <b>?</b> ajuda. Personagens, empresas e valores dos cenários são fictícios.</p>
+  </main>
+
+  <div class="placar" id="placar"></div>
+</div>
+
+<script src="assets/motor.js"></script>
+<script>
+(function () {
+  var sel = document.getElementById('qtdTimes');
+  var box = document.getElementById('nomesTimes');
+  sel.value = String(Motor.times.length);
+
+  function desenharCampos() {
+    var n = +sel.value, html = '';
+    for (var i = 0; i < n; i++) {
+      var atual = Motor.times[i] ? Motor.times[i].nome : Motor.NOMES_PADRAO[i];
+      html += '<label><span class="cor" style="background:' + Motor.CORES[i] + '"></span> <input data-i="' + i + '" value="' + Motor.esc(atual) + '"></label>';
+    }
+    box.innerHTML = html;
+  }
+  sel.onchange = desenharCampos;
+  desenharCampos();
+
+  document.getElementById('btnSalvarTimes').onclick = function () {
+    var lista = [];
+    box.querySelectorAll('input').forEach(function (inp, i) {
+      lista.push({ nome: inp.value.trim(), pontos: Motor.times[i] ? Motor.times[i].pontos : 0 });
+    });
+    Motor.definirTimes(lista);
+    Motor.som.acerto();
+  };
+  document.getElementById('btnZerar').onclick = function () {
+    if (confirm('Zerar o placar de todos os times?')) Motor.zerarPlacar();
+  };
+  Motor.iniciarPagina(null, []);
+})();
+</script>
+</body>
+</html>

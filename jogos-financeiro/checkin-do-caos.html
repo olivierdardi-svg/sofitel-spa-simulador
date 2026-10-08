@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check-in do Caos</title>
+<link rel="stylesheet" href="assets/estilo.css">
+<style>
+.mesa{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:1.4em;max-width:1500px;margin:0 auto;align-items:start}
+.hospede{text-align:center;position:relative}
+.hospede .avatar{font-size:7em;line-height:1.1;display:inline-block;transition:transform .3s}
+.hospede img.avatar{width:5.5em;height:5.5em;object-fit:cover;border-radius:50%;border:4px solid var(--gold-d)}
+.hospede .nome{font-family:var(--serif);font-size:2em;font-weight:600;margin-top:.1em}
+.balao{position:relative;background:var(--ink);color:#1b1b1b;border-radius:18px;padding:.8em 1em;margin-top:.8em;font-size:1.1em;font-weight:500;text-align:left}
+.balao::before{content:"";position:absolute;top:-14px;left:50%;margin-left:-14px;border:14px solid transparent;border-top:0;border-bottom-color:var(--ink)}
+.contexto{margin-top:.8em;color:var(--ink2);font-size:.9em;text-align:left;border-left:3px solid var(--gold-d);padding-left:.7em}
+.paciencia{display:flex;align-items:center;gap:.7em;margin-bottom:1em}
+.paciencia .rosto{font-size:2.2em;width:1.3em;text-align:center}
+.paciencia .trilho{flex:1;height:1.1em;background:var(--surface2);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+.paciencia .barra{height:100%;width:100%;background:linear-gradient(90deg,var(--ok),#9bd36a);transition:width .25s linear,background .3s}
+.paciencia .seg{font-family:var(--serif);font-size:1.8em;font-weight:600;min-width:2.2em;text-align:right}
+.paciencia.alerta .barra{background:linear-gradient(90deg,var(--aviso),#f3c76b)}
+.paciencia.critico .barra{background:linear-gradient(90deg,var(--erro),#f08a7f)}
+.pergunta{font-family:var(--serif);font-size:1.75em;font-weight:500;line-height:1.15;margin-bottom:.7em}
+.contador{color:var(--ink3);font-size:.75em;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3em}
+.explodiu .avatar{animation:treme .5s 3}
+@keyframes treme{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-12px) rotate(-8deg)}75%{transform:translateX(12px) rotate(8deg)}}
+.fumaca{position:absolute;top:-.2em;right:18%;font-size:3em;animation:sobe 1s}
+.chegando{animation:chega .6s ease-out}
+@keyframes chega{from{opacity:0;transform:translateX(-80px)}to{opacity:1;transform:none}}
+.barra-acoes{display:flex;justify-content:flex-end;gap:.6em;margin-top:1em}
+@media (max-width:900px){.mesa{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="jogo">
+  <div class="topo">
+    <h1><small>Jogo 1 · Recepção / Front Office · FIN-10 a FIN-16</small>Check-in do Caos</h1>
+    <div class="acoes">
+      <button class="btn-ico" id="btnAjuda">? Atalhos</button>
+      <button class="btn-ico" id="btnSom">🔊 Som</button>
+      <button class="btn-ico" id="btnTela">⛶ Tela cheia</button>
+      <a class="btn-ico" href="index.html" style="text-decoration:none">☰ Menu</a>
+    </div>
+  </div>
+
+  <main class="palco" id="palco">
+    <section class="abertura" id="telaAbertura">
+      <div class="titulo">Check-in do <em>Caos</em></div>
+      <p class="muted">Sexta-feira, 18h. O lobby lotou e cada hóspede chega com uma ideia "criativa". O time da vez tem que dar a resposta certa antes que o hóspede perca a paciência.</p>
+      <ol>
+        <li>Um hóspede chega por vez. A barra de paciência começa a cair.</li>
+        <li>O time da vez discute e diz a letra. O apresentador clica (ou tecla 1 a 4).</li>
+        <li>Acertou: 100 pontos + bônus pela paciência que sobrou (até +100).</li>
+        <li>Errou ou o tempo acabou: o hóspede explode e a resposta certa aparece. O apresentador pode dar o roubo (+50) para outro time no placar.</li>
+        <li>A cada hóspede, a vez passa para o próximo time.</li>
+      </ol>
+      <div class="config">
+        <label>Hóspedes: <select id="cfgQtd"></select></label>
+        <label>Paciência (segundos): <select id="cfgSeg"><option>30</option><option selected>45</option><option>60</option><option>90</option></select></label>
+        <label><input type="checkbox" id="cfgAleat" checked> Ordem aleatória</label>
+      </div>
+      <div><button class="btn" id="btnComecar">Abrir as portas do lobby ▶</button></div>
+    </section>
+
+    <section class="mesa oculto" id="telaJogo">
+      <div class="hospede" id="hospede"></div>
+      <div>
+        <div class="paciencia" id="paciencia">
+          <span class="rosto" id="rosto">😊</span>
+          <div class="trilho"><div class="barra" id="barra"></div></div>
+          <span class="seg" id="seg">45</span>
+        </div>
+        <div class="contador" id="contador"></div>
+        <div class="pergunta" id="pergunta"></div>
+        <div class="opcoes" id="opcoes"></div>
+        <div id="resposta"></div>
+        <div class="barra-acoes">
+          <button class="btn sec" id="btnPausa">⏸ Pausar (P)</button>
+          <button class="btn oculto" id="btnProx">Próximo hóspede ▶ (Espaço)</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="telaFim" class="oculto"></section>
+  </main>
+
+  <div class="placar" id="placar"></div>
+</div>
+
+<script src="assets/motor.js"></script>
+<script src="dados/checkin.js"></script>
+<script>
+(function () {
+  var D = window.DADOS_CHECKIN;
+  var $ = function (id) { return document.getElementById(id); };
+  var fila = [], idx = 0, total = 45, resta = 45, timer = null, pausado = false, respondido = false, opcoesAtuais = [];
+  var revisao = [];
+
+  var sel = $('cfgQtd');
+  for (var n = 3; n <= D.length; n++) sel.innerHTML += '<option' + (n === Math.min(10, D.length) ? ' selected' : '') + '>' + n + '</option>';
+
+  $('btnComecar').onclick = function () {
+    total = +$('cfgSeg').value;
+    fila = $('cfgAleat').checked ? Motor.embaralhar(D) : D.slice();
+    fila = fila.slice(0, +sel.value);
+    $('telaAbertura').classList.add('oculto');
+    $('telaJogo').classList.remove('oculto');
+    idx = 0; mostrar();
+  };
+
+  function mostrar() {
+    var h = fila[idx];
+    respondido = false; pausado = false; resta = total;
+    $('btnProx').classList.add('oculto');
+    $('btnPausa').classList.remove('oculto');
+    $('btnPausa').textContent = '⏸ Pausar (P)';
+    $('resposta').innerHTML = '';
+    $('contador').textContent = 'Hóspede ' + (idx + 1) + ' de ' + fila.length + ' · vez do ' + Motor.timeAtivo().nome;
+    var hosp = $('hospede');
+    hosp.className = 'hospede chegando';
+    hosp.innerHTML = Motor.imagemOuEmoji(h.midia, h.avatar, 'avatar') +
+      '<div class="nome">' + Motor.esc(h.nome) + '</div>' +
+      '<div class="balao">“' + Motor.esc(h.fala) + '”</div>' +
+      (h.contexto ? '<div class="contexto">' + Motor.esc(h.contexto) + '</div>' : '');
+    $('pergunta').textContent = h.pergunta;
+    opcoesAtuais = Motor.prepararOpcoes(h);
+    $('opcoes').innerHTML = opcoesAtuais.map(function (o, i) {
+      return '<button class="opcao" data-i="' + i + '"><span class="tecla">' + (i + 1) + '</span><span>' + Motor.esc(o.txt) + '</span></button>';
+    }).join('');
+    atualizarBarra();
+    clearInterval(timer);
+    timer = setInterval(passo, 250);
+    Motor.som.clique();
+  }
+
+  function passo() {
+    if (pausado || respondido) return;
+    var antes = Math.ceil(resta);
+    resta = Math.max(0, resta - 0.25);
+    if (Math.ceil(resta) !== antes && resta <= 10 && resta > 0) Motor.som.tique();
+    atualizarBarra();
+    if (resta <= 0) responder(null);
+  }
+
+  function atualizarBarra() {
+    var p = resta / total;
+    $('barra').style.width = (p * 100) + '%';
+    $('seg').textContent = Math.ceil(resta);
+    $('rosto').textContent = p > .66 ? '😊' : p > .4 ? '😐' : p > .2 ? '😠' : '🤬';
+    $('paciencia').className = 'paciencia' + (p <= .2 ? ' critico' : p <= .4 ? ' alerta' : '');
+  }
+
+  function responder(i) {
+    if (respondido) return;
+    respondido = true;
+    clearInterval(timer);
+    var h = fila[idx];
+    var certa = i != null && opcoesAtuais[i].certa;
+    document.querySelectorAll('#opcoes .opcao').forEach(function (b, k) {
+      b.disabled = true;
+      if (opcoesAtuais[k].certa) b.classList.add('certa');
+      else if (k === i) b.classList.add('errada');
+      else b.classList.add('apagada');
+    });
+    var titulo, extra = '';
+    if (certa) {
+      var bonus = Math.round(100 * resta / total);
+      Motor.pontuar(Motor.ativo, 100 + bonus);
+      Motor.som.acerto();
+      titulo = '✔ Hóspede atendido! +' + (100 + bonus) + ' pontos (' + bonus + ' de bônus de paciência)';
+    } else {
+      Motor.som[i == null ? 'buzina' : 'erro']();
+      $('hospede').classList.add('explodiu');
+      $('hospede').insertAdjacentHTML('beforeend', '<span class="fumaca">💢</span>');
+      $('rosto').textContent = '🤯';
+      titulo = i == null ? '⏰ O hóspede perdeu a paciência!' : '✘ Resposta errada!';
+      if (h.reacaoErro) extra = '<p class="muted" style="margin-bottom:.4em"><i>' + Motor.esc(h.reacaoErro) + '</i></p>';
+    }
+    var certaTxt = opcoesAtuais.filter(function (o) { return o.certa; })[0].txt;
+    $('resposta').innerHTML = '<div class="resposta' + (certa ? '' : ' mal') + '"><h3>' + titulo + '</h3>' + extra +
+      '<p>' + Motor.esc(h.explicacao) + '</p><span class="fin">' + Motor.esc(h.fin) + '</span></div>';
+    revisao.push({ situacao: h.nome + ': ' + h.pergunta, resposta: certaTxt, fin: h.fin });
+    $('btnPausa').classList.add('oculto');
+    $('btnProx').classList.remove('oculto');
+    Motor.mostrarNaTela($('btnProx'));
+    $('btnProx').textContent = idx + 1 < fila.length ? 'Próximo hóspede ▶ (Espaço)' : 'Fechar o lobby e ver o placar ▶';
+  }
+
+  function proximo() {
+    if (!respondido) return;
+    idx++;
+    if (idx >= fila.length) { fim(); return; }
+    Motor.proximoTime();
+    mostrar();
+  }
+
+  function fim() {
+    $('telaJogo').classList.add('oculto');
+    $('telaFim').classList.remove('oculto');
+    Motor.renderRevisao($('telaFim'), 'Lobby fechado! Resultado do Check-in do Caos', revisao);
+  }
+
+  function pausar() {
+    if (respondido) return;
+    pausado = !pausado;
+    $('btnPausa').textContent = pausado ? '▶ Continuar (P)' : '⏸ Pausar (P)';
+  }
+
+  $('opcoes').addEventListener('click', function (e) {
+    var b = e.target.closest('.opcao'); if (b) responder(+b.getAttribute('data-i'));
+  });
+  $('btnProx').onclick = proximo;
+  $('btnPausa').onclick = pausar;
+
+  Motor.iniciarPagina(function (e, k) {
+    if ($('telaJogo').classList.contains('oculto')) {
+      if ((k === 'enter' || k === ' ') && !$('telaAbertura').classList.contains('oculto')) { e.preventDefault(); $('btnComecar').click(); }
+      return;
+    }
+    if (k >= '1' && k <= '4') { var i = +k - 1; if (i < opcoesAtuais.length) responder(i); }
+    else if (k === ' ' || k === 'enter') { e.preventDefault(); proximo(); }
+    else if (k === 'p') pausar();
+  }, [['1–4', 'Escolher a resposta'], ['P', 'Pausar a paciência'], ['Espaço', 'Próximo hóspede']]);
+})();
+</script>
+</body>
+</html>

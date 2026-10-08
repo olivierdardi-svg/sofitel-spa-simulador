@@ -1,0 +1,110 @@
+/* Jogos do Financeiro · Sofitel Rio de Janeiro Ipanema
+   Estilo compartilhado, pensado para projeção (tela 16:9, fundo escuro, letra grande). */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap');
+
+:root{
+  --bg:#12151c; --bg2:#1a1f29; --surface:#222835; --surface2:#2b3242; --border:#3a4256;
+  --ink:#f4f1ea; --ink2:#c9c3b6; --ink3:#8f8a80;
+  --gold:#c9a45c; --gold-l:#e6cf9c; --gold-d:#8e7038;
+  --ok:#3fb27f; --ok-bg:rgba(63,178,127,.16);
+  --erro:#e0564f; --erro-bg:rgba(224,86,79,.16);
+  --aviso:#e8a93a; --aviso-bg:rgba(232,169,58,.16);
+  --info:#5aa0e0; --info-bg:rgba(90,160,224,.16);
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:14px;
+  --fs:clamp(16px,1.35vw,26px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:var(--fs);line-height:1.4;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--gold-l)}
+.serif{font-family:var(--serif)}
+.ouro{color:var(--gold)}
+.muted{color:var(--ink3)}
+.oculto{display:none!important}
+
+/* ---------- Estrutura de página de jogo ---------- */
+.jogo{display:grid;grid-template-rows:auto 1fr auto;min-height:100vh}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7em 1.4em;background:#0c0e13;border-bottom:1px solid var(--border)}
+.topo h1{font-family:var(--serif);font-weight:500;font-size:1.6em;letter-spacing:.01em}
+.topo h1 small{display:block;font-family:var(--sans);font-size:.42em;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.topo .acoes{display:flex;gap:.5em;align-items:center}
+.btn-ico{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.35em .7em;font-size:.8em;color:var(--ink2)}
+.btn-ico:hover{border-color:var(--gold);color:var(--ink)}
+.palco{padding:1.2em 1.6em;position:relative}
+
+/* ---------- Placar ---------- */
+.placar{position:sticky;bottom:0;z-index:5;display:flex;gap:.6em;padding:.6em 1.2em;background:#0c0e13;border-top:1px solid var(--border);flex-wrap:wrap;justify-content:center}
+.chip{display:flex;align-items:center;gap:.5em;background:var(--surface);border:2px solid transparent;border-radius:999px;padding:.25em .4em .25em .9em;transition:transform .2s,border-color .2s}
+.chip.ativo{border-color:var(--cor,var(--gold));transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.chip .bola{width:.8em;height:.8em;border-radius:50%;background:var(--cor)}
+.chip .nome{font-weight:500;cursor:pointer}
+.chip .pts{font-family:var(--serif);font-size:1.35em;font-weight:600;min-width:2.4em;text-align:right}
+.chip .mm{display:flex;gap:2px}
+.chip .mm button{background:var(--surface2);border:none;border-radius:50%;width:1.6em;height:1.6em;font-size:.75em;line-height:1}
+.chip .mm button:hover{background:var(--gold-d)}
+.chip.pulso .pts{animation:pulso .6s}
+@keyframes pulso{0%{transform:scale(1)}40%{transform:scale(1.5);color:var(--gold-l)}100%{transform:scale(1)}}
+.vez{font-size:.75em;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);align-self:center;margin-right:.4em}
+
+/* ---------- Cartões, botões ---------- */
+.cartao{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1em 1.3em}
+.btn{background:var(--gold);color:#1b1608;border:none;border-radius:12px;padding:.6em 1.3em;font-weight:700;font-size:1em;letter-spacing:.02em}
+.btn:hover{background:var(--gold-l)}
+.btn.sec{background:transparent;border:1px solid var(--border);color:var(--ink)}
+.btn.sec:hover{border-color:var(--gold)}
+.opcoes{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.opcao{display:flex;gap:.7em;align-items:flex-start;text-align:left;background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:.7em .9em;font-size:.95em;transition:border-color .15s,background .15s}
+.opcao:hover{border-color:var(--gold)}
+.opcao .tecla{flex:none;width:1.7em;height:1.7em;border-radius:8px;background:var(--bg);display:grid;place-items:center;font-weight:700;color:var(--gold)}
+.opcao.certa{border-color:var(--ok);background:var(--ok-bg)}
+.opcao.errada{border-color:var(--erro);background:var(--erro-bg)}
+.opcao.apagada{opacity:.38}
+.opcao:disabled{cursor:default}
+
+/* ---------- Painel de resposta ---------- */
+.resposta{margin-top:1em;border-radius:var(--r);padding:1em 1.2em;border-left:6px solid var(--ok);background:var(--ok-bg);animation:sobe .35s ease-out}
+.resposta.mal{border-left-color:var(--erro);background:var(--erro-bg)}
+.resposta h3{font-family:var(--serif);font-size:1.45em;font-weight:600;margin-bottom:.2em}
+.resposta p{color:var(--ink)}
+.fin{display:inline-block;margin-top:.5em;background:#0c0e13;border:1px solid var(--gold-d);color:var(--gold-l);border-radius:8px;padding:.15em .6em;font-size:.8em;font-weight:700;letter-spacing:.06em}
+@keyframes sobe{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* ---------- Tela de abertura do jogo ---------- */
+.abertura{max-width:1100px;margin:0 auto;display:grid;gap:1em;padding-top:1em}
+.abertura .titulo{font-family:var(--serif);font-size:3.4em;line-height:1;font-weight:500}
+.abertura .titulo em{color:var(--gold);font-style:italic}
+.abertura ol{margin-left:1.3em;display:grid;gap:.35em;color:var(--ink2)}
+.config{display:flex;gap:1.4em;flex-wrap:wrap;align-items:center}
+.config label{display:flex;gap:.5em;align-items:center;color:var(--ink2)}
+.config select,.config input{font:inherit;background:var(--surface2);color:var(--ink);border:1px solid var(--border);border-radius:8px;padding:.25em .5em}
+
+/* ---------- Revisão final ---------- */
+.revisao{max-width:1200px;margin:0 auto}
+.revisao h2{font-family:var(--serif);font-size:2.4em;font-weight:500;margin-bottom:.4em}
+.revisao table{width:100%;border-collapse:collapse;font-size:.8em}
+.revisao th,.revisao td{text-align:left;padding:.5em .6em;border-bottom:1px solid var(--border);vertical-align:top}
+.revisao th{color:var(--gold);font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-size:.85em}
+.podio{display:flex;gap:1em;justify-content:center;margin:1em 0 1.6em;flex-wrap:wrap}
+.podio .lugar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.8em 1.4em;text-align:center;min-width:9em}
+.podio .lugar.primeiro{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-d)}
+.podio .lugar b{display:block;font-family:var(--serif);font-size:2em}
+
+/* ---------- Ajuda de teclado ---------- */
+.ajuda{position:fixed;inset:0;background:rgba(0,0,0,.72);display:grid;place-items:center;z-index:50}
+.ajuda .cartao{max-width:640px}
+.ajuda kbd{display:inline-block;min-width:1.8em;text-align:center;background:var(--bg);border:1px solid var(--border);border-bottom-width:3px;border-radius:6px;padding:0 .35em;margin-right:.4em;font-family:var(--sans);font-size:.85em}
+.ajuda li{list-style:none;margin:.35em 0}
+
+/* ---------- Confete simples ---------- */
+.confete{position:fixed;top:-20px;width:12px;height:18px;z-index:60;pointer-events:none;animation:cai linear forwards}
+@keyframes cai{to{transform:translateY(110vh) rotate(720deg)}}
+
+@media (max-width:800px){
+  .opcoes{grid-template-columns:1fr}
+  .abertura .titulo{font-size:2.4em}
+  .palco{padding:1em}
+}
+#btnProx,#p2{scroll-margin-bottom:6em}
