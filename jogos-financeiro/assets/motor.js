@@ -25,15 +25,28 @@
     return lista;
   }
 
+  /* Na demo offline (arquivo único), cada jogo roda dentro de um iframe:
+     o placar e o botão de menu são os da página-mãe. */
+  var mae = null;
+  try { if (window.parent !== window && window.parent.Motor) mae = window.parent.Motor; } catch (e) { mae = null; }
+
   var Motor = {
-    times: lerArmazenado() || timesPadrao(3),
+    times: mae ? mae.times : (lerArmazenado() || timesPadrao(3)),
     ativo: 0,
     mudo: false,
     CORES: CORES,
     NOMES_PADRAO: NOMES_PADRAO,
 
     salvar: function () {
+      if (mae) { mae.salvar(); return; }
       try { localStorage.setItem(CHAVE, JSON.stringify(Motor.times)); } catch (e) { /* ignora */ }
+    },
+
+    /* Volta ao menu. Retorna false quando já tratou (demo offline), para o link não navegar. */
+    irMenu: function () {
+      if (mae && window.parent.fecharJogo) { window.parent.fecharJogo(); return false; }
+      location.href = 'index.html';
+      return false;
     },
 
     definirTimes: function (lista) {
@@ -176,7 +189,7 @@
         html += '<tr><td>' + esc(l.situacao) + '</td><td>' + esc(l.resposta) + '</td><td><span class="fin">' + esc(l.fin) + '</span></td></tr>';
       });
       html += '</tbody></table><p style="margin-top:1.2em;display:flex;gap:.6em;flex-wrap:wrap">' +
-        '<a class="btn" href="index.html" style="text-decoration:none">← Voltar ao menu</a>' +
+        '<a class="btn" href="index.html" onclick="return Motor.irMenu()" style="text-decoration:none">← Voltar ao menu</a>' +
         '<button class="btn sec" onclick="location.reload()">Jogar de novo</button></p></div>';
       alvo.innerHTML = html;
       Motor.som.vitoria();
@@ -203,7 +216,7 @@
         if (document.querySelector('.ajuda')) { document.querySelector('.ajuda').remove(); return; }
         if (k === 'f') { Motor.telaCheia(); return; }
         if (k === 'm') { Motor.alternarSom(); return; }
-        if (k === 'h') { location.href = 'index.html'; return; }
+        if (k === 'h') { Motor.irMenu(); return; }
         if (k === '?') { Motor.ajuda(textoAjuda); return; }
         if (k === 'n') { Motor.proximoTime(); return; }
         if (extra) extra(e, k);

@@ -4,6 +4,19 @@ Pacote de 5 jogos de treinamento para apresentar **ao vivo**, projetados numa te
 dividida em times. Conteúdo em português do Brasil, tirado do **Livro do Financeiro**
 (FIN-00 a FIN-52, base FOCUS 2025).
 
+## Demo offline (um arquivo só)
+
+`demo-offline.html` tem os 5 jogos dentro de um único arquivo. Funciona sem internet e sem as
+pastas `assets/` e `dados/`: dá para mandar por e-mail, pôr num pen drive e abrir com dois
+cliques. Usa as fontes do sistema em vez da fonte do Google.
+
+Ele é gerado a partir dos arquivos da pasta. Depois de mudar qualquer pergunta em `dados/`,
+gere de novo:
+
+```
+python3 jogos-financeiro/ferramentas/gerar-demo.py
+```
+
 ## Como abrir
 
 1. Abra `index.html` no navegador (Chrome ou Edge). Não precisa instalar nada nem de internet;
