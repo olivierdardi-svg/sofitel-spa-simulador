@@ -1,0 +1,48 @@
+/*
+ * FAST SPORT, THE GAME · design tokens
+ *
+ * The fast-sport.fr site could not be reached when this theme was built,
+ * so the brand colours below are a provisional proposal (deep navy +
+ * signal orange). Replace these values with the official ones from the
+ * site's style sheet / brand guide: every component reads them from here.
+ */
+.fsg-app {
+  /* surfaces */
+  --fsg-ink: #0b1424;
+  --fsg-ink-2: #101c32;
+  --fsg-ink-3: #182844;
+  --fsg-line: rgba(255, 255, 255, 0.1);
+  --fsg-line-strong: rgba(255, 255, 255, 0.22);
+
+  /* text */
+  --fsg-text: #f6f4ef;
+  --fsg-text-2: rgba(246, 244, 239, 0.72);
+  --fsg-text-3: rgba(246, 244, 239, 0.48);
+
+  /* brand */
+  --fsg-accent: #ff5a1f;      /* primary action, highlights */
+  --fsg-accent-hover: #ff7440;
+  --fsg-on-accent: #0b1424;
+  --fsg-blue: #3d7bff;        /* secondary, rival team */
+
+  /* feedback */
+  --fsg-success: #2fd480;
+  --fsg-warn: #ffc23d;
+  --fsg-danger: #ff4d5e;
+
+  /* sport scenes */
+  --fsg-court: #0f1d36;
+  --fsg-court-line: rgba(255, 255, 255, 0.14);
+  --fsg-skin: #f1c7a5;
+  --fsg-tennis-ball: #dff35a;
+
+  /* type */
+  --fsg-font: 'Archivo Variable', 'Archivo', 'Helvetica Neue', Arial, system-ui, sans-serif;
+
+  /* shape & motion */
+  --fsg-radius: 16px;
+  --fsg-radius-sm: 10px;
+  --fsg-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fsg-fast: 160ms;
+  --fsg-mid: 280ms;
+}

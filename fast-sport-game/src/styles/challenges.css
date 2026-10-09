@@ -1,0 +1,246 @@
+/* ================= sport scenes (SVG) ================= */
+.fsg-scene {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.fsg-court-lines {
+  fill: none;
+  stroke: var(--fsg-court-line);
+  stroke-width: 1.5;
+}
+.fsg-player .fsg-jersey { fill: var(--fsg-accent); }
+.fsg-player--rival .fsg-jersey { fill: var(--fsg-blue); }
+.fsg-player .fsg-head { fill: var(--fsg-skin); }
+.fsg-player .fsg-limb { fill: #d9d5cc; }
+.fsg-player--rival .fsg-limb { fill: #c9cfdb; }
+
+/* basket */
+.fsg-board { fill: rgba(255, 255, 255, 0.06); stroke: rgba(255, 255, 255, 0.75); stroke-width: 2; }
+.fsg-board-inner { fill: none; stroke: rgba(255, 255, 255, 0.75); stroke-width: 2; }
+.fsg-rim-back { fill: none; stroke: var(--fsg-accent); stroke-width: 3; opacity: 0.55; }
+.fsg-rim { fill: none; stroke: var(--fsg-accent); stroke-width: 3.5; stroke-linecap: round; }
+.fsg-net { fill: none; stroke: rgba(255, 255, 255, 0.7); stroke-width: 1.2; transform-box: fill-box; transform-origin: top; }
+.fsg-net.is-swish { animation: fsg-net 380ms ease-out; }
+@keyframes fsg-net { 40% { transform: scaleY(1.25) scaleX(0.9); } }
+.fsg-ball-basket { fill: var(--fsg-accent); }
+.fsg-ball-seam { fill: none; stroke: var(--fsg-ink); stroke-width: 1.4; stroke-linecap: round; }
+.fsg-aim { fill: none; stroke: var(--fsg-text); stroke-width: 1.5; stroke-dasharray: 3 6; opacity: 0.55; }
+.fsg-aim circle { stroke-dasharray: none; }
+
+/* tennis */
+.fsg-net-post { fill: rgba(255, 255, 255, 0.8); }
+.fsg-net-mesh { stroke: rgba(255, 255, 255, 0.4); stroke-width: 10; stroke-dasharray: 2 3; }
+.fsg-ball-tennis { fill: var(--fsg-tennis-ball); }
+.fsg-racket { fill: rgba(255, 255, 255, 0.12); stroke: #fff; stroke-width: 2.5; }
+.fsg-shadow { fill: #000; }
+.fsg-hitzone {
+  fill: none;
+  stroke: var(--fsg-line-strong);
+  stroke-width: 2;
+  stroke-dasharray: 4 5;
+  transition: stroke var(--fsg-fast);
+}
+.fsg-hitzone.is-armed { stroke: var(--fsg-tennis-ball); }
+.fsg-scene-judge {
+  font-family: var(--fsg-font);
+  font-weight: 900;
+  font-stretch: 120%;
+  font-size: 16px;
+  fill: var(--fsg-tennis-ball);
+}
+.fsg-scene-judge.is-bad { fill: var(--fsg-danger); }
+.fsg-dot { fill: none; stroke: var(--fsg-line-strong); stroke-width: 2; }
+.fsg-dot.is-current { stroke: var(--fsg-text); }
+.fsg-dot.is-on { fill: var(--fsg-tennis-ball); stroke: var(--fsg-tennis-ball); }
+.fsg-track-rail { fill: rgba(255, 255, 255, 0.08); }
+.fsg-track-good { fill: rgba(47, 212, 128, 0.35); }
+.fsg-track-perfect { fill: var(--fsg-success); }
+.fsg-track-marker { fill: var(--fsg-tennis-ball); stroke: var(--fsg-ink); stroke-width: 2; }
+
+/* rugby */
+.fsg-posts line { stroke: #fff; stroke-width: 4; stroke-linecap: round; transition: stroke var(--fsg-mid); }
+.fsg-posts.is-scored line { stroke: var(--fsg-success); }
+.fsg-ball-rugby { fill: #f3efe6; stroke: var(--fsg-ink); stroke-width: 1.5; }
+.fsg-tee { fill: var(--fsg-accent); }
+.fsg-wind { fill: none; stroke: var(--fsg-text-2); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.fsg-wind text,
+.fsg-power text,
+.fsg-step {
+  font-family: var(--fsg-font);
+  font-weight: 800;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  fill: var(--fsg-text-2);
+  stroke: none;
+}
+.fsg-step { font-size: 13px; fill: var(--fsg-text); }
+.fsg-dial-arc { fill: none; stroke: var(--fsg-line-strong); stroke-width: 8; stroke-linecap: round; }
+.fsg-dial-needle { stroke: var(--fsg-text-2); stroke-width: 3; stroke-linecap: round; }
+.fsg-dial.is-active .fsg-dial-needle { stroke: var(--fsg-accent); }
+.fsg-power-rail { fill: rgba(255, 255, 255, 0.08); }
+.fsg-power-fill { fill: var(--fsg-text-3); }
+.fsg-power-fill.is-ok { fill: var(--fsg-success); }
+.fsg-power-min { stroke: var(--fsg-text); stroke-width: 2; }
+.fsg-power:not(.is-active) { opacity: 0.6; }
+
+/* ================= business choices ================= */
+.fsg-choice {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(18px, 4vw, 36px) clamp(16px, 4vw, 32px);
+  align-self: center;
+}
+.fsg-choice-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fsg-choice-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 12px;
+  background: rgba(255, 90, 31, 0.14);
+  color: var(--fsg-accent);
+}
+.fsg-choice--english .fsg-choice-icon { background: rgba(61, 123, 255, 0.16); color: #8db0ff; }
+.fsg-choice--law .fsg-choice-icon { background: rgba(255, 255, 255, 0.08); color: var(--fsg-text); }
+.fsg-choice-context {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fsg-text-2);
+}
+.fsg-choice-prompt {
+  font-weight: 800;
+  font-stretch: 108%;
+  font-size: clamp(1.3rem, 3.6vw, 1.9rem);
+  line-height: 1.15;
+}
+.fsg-choice-list {
+  display: grid;
+  gap: 10px;
+}
+.fsg-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 58px;
+  padding: 10px 16px 10px 10px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--fsg-ink-3);
+  box-shadow: inset 0 0 0 1px var(--fsg-line);
+  text-align: left;
+  font-size: 1.02rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform var(--fsg-fast) var(--fsg-ease),
+    box-shadow var(--fsg-fast),
+    background-color var(--fsg-fast),
+    opacity var(--fsg-mid);
+}
+.fsg-option:not(:disabled):hover {
+  box-shadow: inset 0 0 0 1.5px var(--fsg-accent);
+  transform: translateX(3px);
+}
+.fsg-option:not(:disabled):active {
+  transform: scale(0.99);
+}
+.fsg-option:disabled {
+  cursor: default;
+}
+.fsg-option-key {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: 10px;
+  background: var(--fsg-ink);
+  font-weight: 900;
+  color: var(--fsg-text-2);
+}
+.fsg-option.is-best {
+  background: rgba(47, 212, 128, 0.16);
+  box-shadow: inset 0 0 0 2px var(--fsg-success);
+}
+.fsg-option.is-best .fsg-option-key { background: var(--fsg-success); color: var(--fsg-ink); }
+.fsg-option.is-wrong {
+  background: rgba(255, 77, 94, 0.14);
+  box-shadow: inset 0 0 0 2px var(--fsg-danger);
+  animation: fsg-shake 300ms;
+}
+.fsg-option.is-wrong .fsg-option-key { background: var(--fsg-danger); color: var(--fsg-ink); }
+.fsg-option.is-almost {
+  background: rgba(255, 194, 61, 0.12);
+  box-shadow: inset 0 0 0 2px var(--fsg-warn);
+}
+.fsg-option.is-almost .fsg-option-key { background: var(--fsg-warn); color: var(--fsg-ink); }
+.fsg-option.is-dim { opacity: 0.45; }
+@keyframes fsg-shake {
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.fsg-explain {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--fsg-ink);
+  box-shadow: inset 0 0 0 1px var(--fsg-line);
+  animation: fsg-rise 260ms var(--fsg-ease) both;
+}
+.fsg-explain-text {
+  font-size: 0.95rem;
+  color: var(--fsg-text-2);
+}
+.fsg-explain-text strong {
+  color: var(--fsg-text);
+}
+.fsg-explain-legal {
+  grid-column: 1;
+  font-size: 0.75rem;
+  color: var(--fsg-text-3);
+}
+.fsg-explain-next {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  overflow: hidden;
+}
+.fsg-explain-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--fsg-accent);
+  transform-origin: left;
+}
+@media (max-width: 560px) {
+  .fsg-explain {
+    grid-template-columns: 1fr;
+  }
+  .fsg-explain-next {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+/* Scenes may draw floor lines beyond their viewBox: on tall (mobile) or
+   very wide stages the court then fills the whole stage instead of
+   leaving empty bands. The stage itself clips. */
+.fsg-scene {
+  overflow: visible;
+}

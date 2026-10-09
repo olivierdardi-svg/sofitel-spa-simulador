@@ -1,0 +1,404 @@
+.fsg-app[data-screen='game'] {
+  overflow: hidden;
+}
+.fsg-game {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  height: 100%;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 clamp(10px, 2.5vw, 28px);
+}
+
+/* ---------- HUD ---------- */
+.fsg-hud {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 8px 16px;
+  padding: 14px 4px 10px;
+}
+.fsg-hud-mission {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  animation: fsg-slide 260ms var(--fsg-ease) both;
+}
+.fsg-hud-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fsg-accent);
+}
+.fsg-hud-title {
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(1.45rem, 4.2vw, 2.3rem);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fsg-hud-hint {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: var(--fsg-text-2);
+}
+.fsg-hud-keys {
+  color: var(--fsg-text-3);
+}
+@media (hover: none), (max-width: 640px) {
+  .fsg-hud-keys { display: none; }
+}
+.fsg-hud-stats {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+.fsg-hud-time,
+.fsg-hud-score {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 6px 12px;
+  border-radius: var(--fsg-radius-sm);
+  background: var(--fsg-ink-2);
+  box-shadow: inset 0 0 0 1px var(--fsg-line);
+}
+.fsg-hud-score {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  min-width: 92px;
+}
+.fsg-hud-label,
+.fsg-hud-unit {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fsg-text-3);
+}
+.fsg-hud-num {
+  font-weight: 900;
+  font-stretch: 110%;
+  font-size: 1.5rem;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.fsg-hud-time {
+  align-items: center;
+  min-width: 70px;
+  justify-content: center;
+}
+.fsg-hud-time .fsg-hud-num {
+  font-size: 2rem;
+}
+.fsg-hud-time.is-urgent {
+  box-shadow: inset 0 0 0 1.5px var(--fsg-danger);
+}
+.fsg-hud-time.is-urgent .fsg-hud-num {
+  color: var(--fsg-danger);
+  animation: fsg-beat 1s ease-in-out infinite;
+}
+.fsg-hud-combo {
+  display: grid;
+  place-items: center;
+  min-width: 52px;
+  border-radius: var(--fsg-radius-sm);
+  font-weight: 900;
+  font-stretch: 115%;
+  font-size: 1.15rem;
+  color: var(--fsg-text-3);
+  box-shadow: inset 0 0 0 1px var(--fsg-line);
+  transition: background-color var(--fsg-mid), color var(--fsg-mid);
+}
+.fsg-hud-combo.is-on {
+  background: var(--fsg-accent);
+  color: var(--fsg-on-accent);
+  box-shadow: none;
+  animation: fsg-pop 300ms var(--fsg-ease);
+}
+.fsg-hud-progress {
+  grid-column: 1 / -1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--fsg-line);
+  overflow: hidden;
+}
+.fsg-hud-progress span {
+  display: block;
+  height: 100%;
+  background: var(--fsg-text);
+  transform-origin: left;
+}
+@media (max-width: 520px) {
+  .fsg-hud {
+    grid-template-columns: 1fr;
+    padding-top: 10px;
+  }
+  .fsg-hud-stats {
+    order: -1;
+    justify-content: space-between;
+  }
+  .fsg-hud-score {
+    flex: 1;
+  }
+  .fsg-hud-hint {
+    font-size: 0.82rem;
+  }
+}
+
+/* challenge timer */
+.fsg-chtimer {
+  height: 6px;
+  margin: 4px 0 8px;
+  border-radius: 3px;
+  background: var(--fsg-ink-2);
+  overflow: hidden;
+}
+.fsg-chtimer span {
+  display: block;
+  height: 100%;
+  background: var(--fsg-accent);
+  transform-origin: left;
+  transition: background-color var(--fsg-mid);
+}
+.fsg-chtimer span.is-low {
+  background: var(--fsg-danger);
+}
+
+/* ---------- stage ---------- */
+.fsg-stage {
+  position: relative;
+  min-height: 0;
+  border-radius: var(--fsg-radius);
+  background: var(--fsg-court);
+  box-shadow: inset 0 0 0 1px var(--fsg-line);
+  overflow: hidden;
+  isolation: isolate;
+}
+/* Only the sport stage blocks touch scrolling/zoom: the player drags and
+   taps there. The rest of the page keeps native behaviour. */
+.fsg-stage--sport {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: crosshair;
+}
+.fsg-stage--business {
+  background: var(--fsg-ink-2);
+  overflow-y: auto;
+}
+.fsg-stage-inner {
+  position: absolute;
+  inset: 0;
+}
+/* The SVG is sized by the stage, never by its own aspect ratio, so the
+   whole scene always fits ("meet") whatever the container shape. */
+.fsg-stage-inner > .fsg-scene {
+  position: absolute;
+  inset: 0;
+}
+.fsg-stage--business .fsg-stage-inner {
+  position: relative;
+  display: grid;
+  min-height: 100%;
+}
+.fsg-enter {
+  animation: fsg-enter 240ms var(--fsg-ease) both;
+}
+@keyframes fsg-enter {
+  from { opacity: 0; transform: translateX(24px); }
+}
+@keyframes fsg-slide {
+  from { opacity: 0; transform: translateY(-6px); }
+}
+@keyframes fsg-beat {
+  50% { transform: scale(1.08); }
+}
+
+.fsg-particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ---------- feedback ---------- */
+.fsg-feedback {
+  position: absolute;
+  left: 50%;
+  top: 36%;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  text-align: center;
+  animation: fsg-feedback 520ms var(--fsg-ease) both;
+}
+.fsg-feedback-label {
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(2.4rem, 8vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.45);
+}
+.fsg-feedback-points {
+  font-weight: 900;
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+}
+.fsg-feedback-points em {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-style: normal;
+  font-size: 0.85em;
+  background: var(--fsg-accent);
+  color: var(--fsg-on-accent);
+}
+.fsg-feedback-reason {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(11, 20, 36, 0.78);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fsg-text-2);
+}
+.fsg-feedback--perfect .fsg-feedback-label { color: var(--fsg-accent); }
+.fsg-feedback--good .fsg-feedback-label,
+.fsg-feedback--ok .fsg-feedback-label { color: var(--fsg-success); }
+.fsg-feedback--almost .fsg-feedback-label { color: var(--fsg-warn); }
+.fsg-feedback--miss .fsg-feedback-label { color: var(--fsg-danger); }
+
+.fsg-feedback--compact {
+  top: 12px;
+  right: 12px;
+  left: auto;
+  transform: none;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--fsg-ink);
+  box-shadow: inset 0 0 0 1px var(--fsg-line-strong), 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  animation: fsg-pop 300ms var(--fsg-ease) both;
+}
+.fsg-feedback--compact .fsg-feedback-label {
+  font-size: 1.15rem;
+  text-shadow: none;
+}
+.fsg-feedback--compact .fsg-feedback-points {
+  font-size: 1rem;
+}
+.fsg-feedback--compact .fsg-feedback-reason {
+  display: none;
+}
+@keyframes fsg-feedback {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  60% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ---------- overlays ---------- */
+.fsg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(11, 20, 36, 0.82);
+  backdrop-filter: blur(4px);
+  text-align: center;
+}
+.fsg-overlay--clear {
+  background: rgba(11, 20, 36, 0.35);
+  backdrop-filter: none;
+  pointer-events: none;
+}
+.fsg-countdown {
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: clamp(3rem, 12vw, 6rem);
+  line-height: 1;
+  animation: fsg-pop 360ms var(--fsg-ease) both;
+}
+.fsg-countdown.is-go {
+  color: var(--fsg-accent);
+}
+.fsg-pause-title {
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: 2.6rem;
+  line-height: 1;
+}
+.fsg-pause-sub {
+  color: var(--fsg-text-2);
+}
+.fsg-pause-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* ---------- short screens (phone landscape, small iframes) ---------- */
+@media (max-height: 560px) {
+  .fsg-hud {
+    padding: 8px 2px 6px;
+  }
+  .fsg-hud-hint {
+    display: none;
+  }
+  .fsg-hud-title {
+    font-size: 1.3rem;
+  }
+  .fsg-hud-num,
+  .fsg-hud-time .fsg-hud-num {
+    font-size: 1.2rem;
+  }
+  .fsg-chtimer {
+    margin: 2px 0 6px;
+  }
+  .fsg-gamebar {
+    padding: 4px 2px max(4px, env(safe-area-inset-bottom));
+  }
+  .fsg-gamebar .fsg-icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .fsg-choice {
+    gap: 8px;
+    padding-block: 12px;
+  }
+  .fsg-option {
+    min-height: 44px;
+  }
+}
+
+/* ---------- bottom bar ---------- */
+.fsg-gamebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 2px max(10px, env(safe-area-inset-bottom));
+}
+.fsg-gamebar-actions {
+  display: flex;
+  gap: 8px;
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test d'intégration iframe</title>
+  <style>
+    body { margin: 0; padding: 40px 16px; font-family: Georgia, serif; color: #222; background: #fff; }
+    p { max-width: 60ch; margin: 0 auto 24px; }
+  </style>
+</head>
+<body>
+  <p>Contenu de la page hôte avant le jeu.</p>
+
+  <!-- ==== Fast Sport, The Game : bloc à copier ==== -->
+  <div class="fastsport-game-embed" style="position:relative;width:100%;max-width:1000px;height:min(85vh,720px);min-height:540px;margin:0 auto;">
+    <iframe
+      src="http://localhost:4173/"
+      title="Fast Sport, The Game : mini-jeu arcade"
+      style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:16px;"
+      allow="autoplay"
+      loading="lazy"></iframe>
+  </div>
+  <!-- ==== fin du bloc ==== -->
+
+  <p>Contenu de la page hôte après le jeu.</p>
+</body>
+</html>

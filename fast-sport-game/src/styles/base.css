@@ -1,0 +1,195 @@
+/* Everything is scoped under .fsg-app and prefixed fsg- to never collide
+   with the host site, even if the game is mounted outside an iframe. */
+html,
+body {
+  margin: 0;
+  background: #0b1424;
+}
+
+.fsg-app {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 320px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: var(--fsg-text);
+  background:
+    radial-gradient(120% 80% at 85% -10%, rgba(61, 123, 255, 0.16), transparent 60%),
+    var(--fsg-ink);
+  font-family: var(--fsg-font);
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  color-scheme: dark;
+}
+.fsg-app *,
+.fsg-app *::before,
+.fsg-app *::after {
+  box-sizing: border-box;
+}
+.fsg-app :where(h1, h2, p, ol, ul, dl, dd, figure) {
+  margin: 0;
+  padding: 0;
+}
+.fsg-app :where(ol, ul) {
+  list-style: none;
+}
+.fsg-app :where(button) {
+  font: inherit;
+  color: inherit;
+}
+.fsg-app :focus-visible {
+  outline: 3px solid var(--fsg-accent);
+  outline-offset: 3px;
+}
+
+.fsg-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- buttons ---------- */
+.fsg-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    transform var(--fsg-fast) var(--fsg-ease),
+    background-color var(--fsg-fast),
+    border-color var(--fsg-fast),
+    color var(--fsg-fast),
+    box-shadow var(--fsg-fast);
+}
+.fsg-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+.fsg-btn--primary {
+  background: var(--fsg-accent);
+  color: var(--fsg-on-accent);
+  box-shadow: 0 10px 30px -12px rgba(255, 90, 31, 0.7);
+}
+.fsg-btn--primary:hover {
+  background: var(--fsg-accent-hover);
+  box-shadow: 0 14px 34px -12px rgba(255, 90, 31, 0.85);
+}
+.fsg-btn--ghost {
+  background: transparent;
+  color: var(--fsg-text);
+  box-shadow: inset 0 0 0 1.5px var(--fsg-line-strong);
+}
+.fsg-btn--ghost:hover {
+  box-shadow: inset 0 0 0 1.5px var(--fsg-text);
+}
+.fsg-btn--link {
+  background: none;
+  color: var(--fsg-text-2);
+  min-height: 40px;
+  padding: 0 10px;
+}
+.fsg-btn--link:hover {
+  color: var(--fsg-text);
+}
+.fsg-btn--xl {
+  min-height: 60px;
+  padding: 0 34px;
+  font-size: 1.05rem;
+}
+
+.fsg-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fsg-text-2);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--fsg-line);
+  transition: color var(--fsg-fast), box-shadow var(--fsg-fast), background-color var(--fsg-fast);
+}
+.fsg-icon-btn:hover {
+  color: var(--fsg-text);
+  box-shadow: inset 0 0 0 1px var(--fsg-line-strong);
+}
+.fsg-icon-btn[aria-pressed='false'] {
+  color: var(--fsg-text-3);
+}
+.fsg-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ---------- brand ---------- */
+.fsg-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  font-stretch: 118%;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.fsg-brand-glyph {
+  width: 26px;
+  height: 26px;
+  fill: var(--fsg-accent);
+}
+.fsg-brand-text b {
+  font-weight: 900;
+  color: var(--fsg-accent);
+  margin-left: 2px;
+}
+.fsg-brand--sm {
+  font-size: 0.82rem;
+  opacity: 0.85;
+}
+.fsg-brand--sm .fsg-brand-glyph {
+  width: 18px;
+  height: 18px;
+}
+
+.fsg-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px clamp(16px, 4vw, 40px);
+}
+
+.fsg-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-stretch: 110%;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fsg-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fsg-app *,
+  .fsg-app *::before,
+  .fsg-app *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
